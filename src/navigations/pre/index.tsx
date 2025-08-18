@@ -7,6 +7,7 @@ import { NavigationConstant } from '../../utils/navConstant';
 import RegisterScreen from '../../screens/pre/registerScreen';
 import ProfilePictureScreen from '../../screens/pre/profilePictureScreen';
 import ForgetPassword from '../../screens/pre/forgetPassword';
+import ForgetPasswordEmail from '../../screens/pre/forgetPasswordEmail';
 
 const PostStack = createNativeStackNavigator();
 
@@ -32,6 +33,10 @@ const PreNavigation = () => {
       <PostStack.Screen
         name={NavigationConstant.FORGOT_PASSWORD_SCREEN}
         component={ForgetPassword}
+      />
+      <PostStack.Screen
+        name={NavigationConstant.FORGOT_PASSWORD_EMAIL_SCREEN}
+        component={ForgetPasswordEmail}
       />
     </PostStack.Navigator>
   );

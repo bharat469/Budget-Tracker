@@ -34,4 +34,10 @@ export const STRING_CONFIG = {
     password: 'Create a password',
     confirmPassword: 'Re-enter your password',
   },
+  forgetPasswordString: {
+    header: 'Forgot Password',
+    headerOne: 'Please enter your email address to ',
+    headerTwo: 'receive a verification code',
+    mailSent: 'Send',
+  },
 };

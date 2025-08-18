@@ -10,6 +10,7 @@ import {
 } from '../../helpers/dimentions';
 import { STRING_CONFIG } from '../../utils/stringConfig';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import HeaderComponent from '../headerComponent';
 
 interface authWrapperProps {
   isSvgShow: boolean;
@@ -18,6 +19,7 @@ interface authWrapperProps {
   headingText?: string;
   svgContainerStyle?: any;
   isShowHeading?: boolean;
+  showHeader?: boolean;
 }
 
 const AuthWrappers: React.FC<authWrapperProps> = ({
@@ -27,6 +29,7 @@ const AuthWrappers: React.FC<authWrapperProps> = ({
   headingText = STRING_CONFIG.authScreenString.headingOne,
   svgContainerStyle,
   isShowHeading = true,
+  showHeader = false,
 }) => {
   return (
     <KeyboardAwareScrollView
@@ -35,6 +38,11 @@ const AuthWrappers: React.FC<authWrapperProps> = ({
       keyboardShouldPersistTaps="handled"
       enableOnAndroid={true}
     >
+      {showHeader && (
+        <HeaderComponent
+          headerTiltle={STRING_CONFIG.forgetPasswordString.header}
+        />
+      )}
       <View style={[styles.svgIconView, svgContainerStyle]}>
         {isSvgShow && (
           <SvgIcon

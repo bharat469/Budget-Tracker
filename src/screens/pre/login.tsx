@@ -62,7 +62,7 @@ const Login = (props: any) => {
           <TouchableWithoutFeedback
             onPress={() =>
               props.navigation.navigate(
-                NavigationConstant.FORGOT_PASSWORD_SCREEN,
+                NavigationConstant.FORGOT_PASSWORD_EMAIL_SCREEN,
               )
             }
           >
