@@ -11,6 +11,7 @@ import {
 import { STRING_CONFIG } from '../../utils/stringConfig';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import HeaderComponent from '../headerComponent';
+import BottomSheetComponent from '../bottomSheetComponent';
 
 interface authWrapperProps {
   isSvgShow: boolean;

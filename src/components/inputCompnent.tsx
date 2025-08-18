@@ -6,10 +6,16 @@ import {
   View,
 } from 'react-native';
 import React, { useRef, useState } from 'react';
-import { moderateScale, SCREEN } from '../helpers/dimentions';
+import {
+  moderateScale,
+  scale,
+  SCREEN,
+  verticalScale,
+} from '../helpers/dimentions';
 import { COLORS } from '../utils/colorConstant';
 import { EyeIcon } from '../assets/svg/eyeOpen';
 import { EyeOffIcon } from '../assets/svg/eyeClose';
+import { KeyboardType } from '../utils/typeConfig';
 
 interface InputProps {
   placeHolder?: string;
@@ -20,6 +26,9 @@ interface InputProps {
   secureEntry?: boolean;
   isShowLeftIcon?: boolean;
   placeHolderColor?: string;
+  errorMessage?: string;
+  inputView?: any;
+  keyBoardType?: KeyboardType;
 }
 
 const InputCompnent: React.FC<InputProps> = ({
@@ -31,6 +40,9 @@ const InputCompnent: React.FC<InputProps> = ({
   secureEntry = false,
   isShowLeftIcon = false,
   placeHolderColor = COLORS.black,
+  errorMessage = '',
+  inputView,
+  keyBoardType = 'default',
 }) => {
   const [show, setShow] = useState(false);
   const inputRef = useRef<TextInput>(null);
@@ -40,24 +52,33 @@ const InputCompnent: React.FC<InputProps> = ({
     inputRef.current?.focus();
   };
   return (
-    <View style={[styles.containerDefaultStyle, containerStyle]}>
-      <TextInput
-        ref={inputRef}
-        placeholder={placeHolder}
-        value={value}
-        onChangeText={onChangeText}
-        style={[styles.inputDefaultStyle, inputStyle]}
-        secureTextEntry={secureEntry && !show}
-        placeholderTextColor={placeHolderColor}
-      />
-      {isShowLeftIcon && (
-        <TouchableOpacity onPress={_handleEyeIcon} style={{ flex: 0.1 }}>
-          {show ? (
-            <EyeOffIcon size={moderateScale(22)} color={COLORS.primaryColor} />
-          ) : (
-            <EyeIcon size={moderateScale(22)} color={COLORS.primaryColor} />
-          )}
-        </TouchableOpacity>
+    <View style={inputView}>
+      <View style={[styles.containerDefaultStyle, containerStyle]}>
+        <TextInput
+          ref={inputRef}
+          placeholder={placeHolder}
+          value={value}
+          onChangeText={onChangeText}
+          style={[styles.inputDefaultStyle, inputStyle]}
+          secureTextEntry={secureEntry && !show}
+          placeholderTextColor={placeHolderColor}
+          keyboardType={keyBoardType}
+        />
+        {isShowLeftIcon && (
+          <TouchableOpacity onPress={_handleEyeIcon} style={{ flex: 0.1 }}>
+            {show ? (
+              <EyeOffIcon
+                size={moderateScale(22)}
+                color={COLORS.primaryColor}
+              />
+            ) : (
+              <EyeIcon size={moderateScale(22)} color={COLORS.primaryColor} />
+            )}
+          </TouchableOpacity>
+        )}
+      </View>
+      {errorMessage.length !== 0 && (
+        <Text style={styles.errorMessage}>{errorMessage}</Text>
       )}
     </View>
   );
@@ -77,5 +98,14 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(16),
     fontWeight: '600',
     color: COLORS.black,
+  },
+  errorMessage: {
+    textAlign: 'left',
+    paddingTop: verticalScale(6),
+    marginHorizontal: scale(22),
+    fontSize: moderateScale(16),
+    color: COLORS.red,
+    fontWeight: '700',
+    textTransform: 'capitalize',
   },
 });

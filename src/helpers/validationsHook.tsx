@@ -4,7 +4,8 @@ export const isValidEmail = (email: string) => {
 };
 
 export const isEmptyCheck = (text: string) => {
-  text.trim().length === 0;
+  console.log(text, 'sjakgdh');
+  return text.trim().length === 0;
 };
 
 export const isValidPassword = (password: string): boolean =>

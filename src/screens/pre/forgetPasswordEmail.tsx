@@ -1,25 +1,40 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import AuthWrappers from '../../components/wrappers/authWrappers';
 import { STRING_CONFIG } from '../../utils/stringConfig';
 import InputCompnent from '../../components/inputCompnent';
 import { moderateScale, scale, verticalScale } from '../../helpers/dimentions';
 import CustomButton from '../../components/customButton';
-import { isValidEmail } from '../../helpers/validationsHook';
+import {
+  isEmptyCheck,
+  isValidEmail,
+  isValidPhoneNumber,
+} from '../../helpers/validationsHook';
 import { NavigationConstant } from '../../utils/navConstant';
 import { COLORS } from '../../utils/colorConstant';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ForgetPasswordEmail = (props: any) => {
-  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [error, setError] = useState('');
 
-  const _handleEmailClick = (email: string) => {
-    let validateEmail = isValidEmail(email);
-    if (validateEmail) {
+  useFocusEffect(
+    useCallback(() => {
+      setError('');
+      setPhoneNumber('');
+      return () => {};
+    }, []),
+  );
+
+  const _handlePhoneClick = (phoneNumber: string) => {
+    if (isEmptyCheck(phoneNumber)) {
+      setError(STRING_CONFIG.errorText.emptyError);
+    } else if (isValidPhoneNumber(phoneNumber)) {
       props.navigation.navigate(NavigationConstant.FORGOT_PASSWORD_SCREEN, {
-        email: email,
+        phoneNumber: phoneNumber,
       });
     } else {
-      console.log('error');
+      setError(STRING_CONFIG.errorText.phoneError);
     }
   };
 
@@ -44,14 +59,16 @@ const ForgetPasswordEmail = (props: any) => {
           </Text>
         </View>
         <InputCompnent
-          value={email}
-          onChangeText={text => setEmail(text)}
-          placeHolder={STRING_CONFIG.basicInfoString.emailAddress}
+          value={phoneNumber}
+          onChangeText={text => setPhoneNumber(text)}
+          placeHolder={STRING_CONFIG.basicInfoString.phoneNumber}
+          keyBoardType="phone-pad"
+          errorMessage={error}
         />
         <CustomButton
           btnTitleName={STRING_CONFIG.forgetPasswordString.mailSent}
           customStyle={{ marginTop: verticalScale(22) }}
-          onPress={() => _handleEmailClick(email)}
+          onPress={() => _handlePhoneClick(phoneNumber)}
         />
       </View>
     </AuthWrappers>

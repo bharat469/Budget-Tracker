@@ -17,7 +17,7 @@ export const STRING_CONFIG = {
     footerText: 'Or sign in with ',
     goggleText: 'Google',
     FaceBookText: 'Facebook',
-    forgetPasswordHeaderText: 'We’ve sent a 6-digit code to your email',
+    forgetPasswordHeaderText: 'We’ve sent a 6-digit code to your Number',
   },
   RegisterScreenString: {
     openCameraBtnText: 'Say Cheese 📸',
@@ -36,8 +36,26 @@ export const STRING_CONFIG = {
   },
   forgetPasswordString: {
     header: 'Forgot Password',
-    headerOne: 'Please enter your email address to ',
+    headerOne: 'Please enter your Phone Number To ',
     headerTwo: 'receive a verification code',
     mailSent: 'Send',
+  },
+  modalText: {
+    errorNetworkModal: {
+      headerOne: 'Something went wrong.',
+      headerTwo: 'Please enter Email And Password',
+      btnText: 'Try Again',
+      otpError: 'Please Enter A Valid OTP',
+      successHeader: 'congratulations',
+      successFooter: '🎉 Password reset successful',
+      passwordFailure: 'Password and confirm password do not match',
+    },
+  },
+  errorText: {
+    emailError: 'Please enter proper Email format',
+    passwordError: 'Password must be at least 6 characters',
+    emptyError: 'Please enter your phone number',
+    phoneError: 'Please enter a valid phone number',
+    otpEmptyError: 'Please enter OTP',
   },
 };
