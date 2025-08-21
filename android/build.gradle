@@ -1,3 +1,6 @@
+project.ext.react = [
+    nodeExecutableAndArgs: ["/Users/apple/.nvm/versions/node/v22.13.1/bin/node"] ]
+
 buildscript {
     ext {
         buildToolsVersion = "35.0.0"
@@ -15,6 +18,7 @@ buildscript {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        classpath 'com.google.gms:google-services:4.4.3'
     }
 }
 

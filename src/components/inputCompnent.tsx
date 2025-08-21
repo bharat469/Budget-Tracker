@@ -100,12 +100,12 @@ const styles = StyleSheet.create({
     color: COLORS.black,
   },
   errorMessage: {
-    textAlign: 'left',
+    textAlign: 'center',
     paddingTop: verticalScale(6),
     marginHorizontal: scale(22),
-    fontSize: moderateScale(16),
+    fontSize: moderateScale(14),
     color: COLORS.red,
-    fontWeight: '700',
+    fontWeight: '500',
     textTransform: 'capitalize',
   },
 });

@@ -21,6 +21,7 @@ interface authWrapperProps {
   svgContainerStyle?: any;
   isShowHeading?: boolean;
   showHeader?: boolean;
+  headerTitle?: string;
 }
 
 const AuthWrappers: React.FC<authWrapperProps> = ({
@@ -31,6 +32,7 @@ const AuthWrappers: React.FC<authWrapperProps> = ({
   svgContainerStyle,
   isShowHeading = true,
   showHeader = false,
+  headerTitle = STRING_CONFIG.forgetPasswordString.header,
 }) => {
   return (
     <KeyboardAwareScrollView
@@ -39,11 +41,7 @@ const AuthWrappers: React.FC<authWrapperProps> = ({
       keyboardShouldPersistTaps="handled"
       enableOnAndroid={true}
     >
-      {showHeader && (
-        <HeaderComponent
-          headerTiltle={STRING_CONFIG.forgetPasswordString.header}
-        />
-      )}
+      {showHeader && <HeaderComponent headerTiltle={headerTitle} />}
       <View style={[styles.svgIconView, svgContainerStyle]}>
         {isSvgShow && (
           <SvgIcon

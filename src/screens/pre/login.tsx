@@ -5,7 +5,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import AuthWrappers from '../../components/wrappers/authWrappers';
 import InputCompnent from '../../components/inputCompnent';
 import { moderateScale, verticalScale, scale } from '../../helpers/dimentions';
@@ -16,79 +16,23 @@ import DividerWithText from '../../helpers/dividerWithText';
 import SvgIcon from '../../components/svgComponent';
 import { NavigationConstant } from '../../utils/navConstant';
 import BottomSheetComponent from '../../components/bottomSheetComponent';
-import {
-  isEmptyCheck,
-  isValidEmail,
-  isValidPassword,
-} from '../../helpers/validationsHook';
-import { useFocusEffect } from '@react-navigation/native';
+import { LOGIN_SCHEMA } from '../../helpers/validationsHook';
+
+import { useValidation } from '../../helpers/yupAdapter';
 
 const Login = (props: any) => {
-  const [loginData, setLoginData] = useState({
-    email: '',
-    password: '',
+  const formik = useValidation({
+    initialValues: { email: '', password: '' },
+    validationSchema: LOGIN_SCHEMA,
+    onSubmit: values => {
+      console.log('submited', values);
+    },
   });
+
   const [isShowModal, setShowModal] = useState(false);
-  const [error, setError] = useState({
-    email: '',
-    password: '',
-    emptyError: '',
-  });
-
-  useFocusEffect(
-    useCallback(() => {
-      setError({
-        email: '',
-        password: '',
-        emptyError: '',
-      });
-
-      setLoginData({
-        email: '',
-        password: '',
-      });
-
-      return () => {};
-    }, []),
-  );
 
   const _handleOnCancelModal = () => {
     setShowModal(!isShowModal);
-  };
-  const _handleOnSubmit = (loginData: any) => {
-    let { email, password } = loginData;
-
-    if (isEmptyCheck(email) || isEmptyCheck(password)) {
-      setShowModal(true);
-      return;
-    }
-
-    if (!isValidEmail(email)) {
-      setError({
-        email: STRING_CONFIG.errorText.emailError,
-        password: '',
-        emptyError: '',
-      });
-      return;
-    }
-
-    if (!isValidPassword(password)) {
-      setError({
-        email: '',
-        password: STRING_CONFIG.errorText.passwordError,
-        emptyError: '',
-      });
-      return;
-    }
-
-    // ✅ Clear all errors
-    setError({
-      email: '',
-      password: '',
-      emptyError: '',
-    });
-
-    console.log('Form submitted ✅', loginData);
   };
 
   return (
@@ -105,30 +49,29 @@ const Login = (props: any) => {
           </View>
           <InputCompnent
             placeHolder={STRING_CONFIG.basicInfoString.emailAddress}
-            value={loginData.email}
-            onChangeText={(data: string) =>
-              setLoginData({ ...loginData, email: data })
-            }
+            value={formik.values.email}
+            onChangeText={formik.handleChange('email')}
             inputView={styles.inputContainerStyle}
-            errorMessage={error.email}
+            errorMessage={formik.touched.email ? formik.errors.email || '' : ''}
+            keyBoardType="email-address"
           />
 
           <InputCompnent
             placeHolder={STRING_CONFIG.basicInfoString.password}
-            value={loginData.password}
-            onChangeText={(data: string) =>
-              setLoginData({ ...loginData, password: data })
-            }
+            value={formik.values.password}
+            onChangeText={formik.handleChange('password')}
             secureEntry={true}
             isShowLeftIcon={true}
             containerStyle={styles.passwordContainer}
             inputStyle={{ flex: 1 }}
-            errorMessage={error.password}
+            errorMessage={
+              formik.touched.password ? formik.errors.password || '' : ''
+            }
           />
           <CustomButton
             btnTitleName={STRING_CONFIG.authScreenString.siginBtnText}
             customStyle={styles.buttonStyle}
-            onPress={() => _handleOnSubmit(loginData)}
+            onPress={formik.handleSubmit as any}
           />
           <View>
             <TouchableWithoutFeedback
@@ -169,6 +112,22 @@ const Login = (props: any) => {
                 </Text>
               </TouchableOpacity>
             </View>
+            <Text
+              style={[styles.forgetText, { marginVertical: verticalScale(12) }]}
+            >
+              {STRING_CONFIG.authScreenString.signUpText}
+              <TouchableWithoutFeedback
+                onPress={() =>
+                  props.navigation.navigate(
+                    NavigationConstant.PROFILE_PICTURE_SCREEN,
+                  )
+                }
+              >
+                <Text style={styles.siginUpView}>
+                  {STRING_CONFIG.authScreenString.siginUpButton}
+                </Text>
+              </TouchableWithoutFeedback>
+            </Text>
           </View>
         </View>
       </AuthWrappers>
@@ -210,14 +169,14 @@ export default Login;
 
 const styles = StyleSheet.create({
   inputContainerStyle: {
-    marginVertical: moderateScale(22),
+    marginVertical: moderateScale(12),
   },
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   buttonStyle: {
-    marginVertical: moderateScale(22),
+    marginVertical: moderateScale(12),
   },
   textView: {
     alignItems: 'center',
@@ -243,6 +202,7 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(12),
     color: COLORS.shadesOfGrey.greyOne,
     fontWeight: '700',
+    textTransform: 'capitalize',
   },
   footerContainer: {
     flexDirection: 'row',
@@ -299,5 +259,8 @@ const styles = StyleSheet.create({
   },
   contentView: {
     marginVertical: verticalScale(16),
+  },
+  siginUpView: {
+    color: COLORS.primaryColor,
   },
 });

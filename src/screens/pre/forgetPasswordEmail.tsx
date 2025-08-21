@@ -1,42 +1,26 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import AuthWrappers from '../../components/wrappers/authWrappers';
 import { STRING_CONFIG } from '../../utils/stringConfig';
 import InputCompnent from '../../components/inputCompnent';
 import { moderateScale, scale, verticalScale } from '../../helpers/dimentions';
 import CustomButton from '../../components/customButton';
-import {
-  isEmptyCheck,
-  isValidEmail,
-  isValidPhoneNumber,
-} from '../../helpers/validationsHook';
+import { PHONE_NUMBER_SCHEMA } from '../../helpers/validationsHook';
 import { NavigationConstant } from '../../utils/navConstant';
 import { COLORS } from '../../utils/colorConstant';
-import { useFocusEffect } from '@react-navigation/native';
+
+import { useValidation } from '../../helpers/yupAdapter';
 
 const ForgetPasswordEmail = (props: any) => {
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [error, setError] = useState('');
-
-  useFocusEffect(
-    useCallback(() => {
-      setError('');
-      setPhoneNumber('');
-      return () => {};
-    }, []),
-  );
-
-  const _handlePhoneClick = (phoneNumber: string) => {
-    if (isEmptyCheck(phoneNumber)) {
-      setError(STRING_CONFIG.errorText.emptyError);
-    } else if (isValidPhoneNumber(phoneNumber)) {
+  const formik = useValidation({
+    initialValues: { phoneNumber: '' },
+    validationSchema: PHONE_NUMBER_SCHEMA,
+    onSubmit: values => {
       props.navigation.navigate(NavigationConstant.FORGOT_PASSWORD_SCREEN, {
-        phoneNumber: phoneNumber,
+        phoneNumber: values.phoneNumber,
       });
-    } else {
-      setError(STRING_CONFIG.errorText.phoneError);
-    }
-  };
+    },
+  });
 
   return (
     <AuthWrappers
@@ -59,16 +43,18 @@ const ForgetPasswordEmail = (props: any) => {
           </Text>
         </View>
         <InputCompnent
-          value={phoneNumber}
-          onChangeText={text => setPhoneNumber(text)}
+          value={formik.values.phoneNumber}
+          onChangeText={formik.handleChange('phoneNumber')}
           placeHolder={STRING_CONFIG.basicInfoString.phoneNumber}
           keyBoardType="phone-pad"
-          errorMessage={error}
+          errorMessage={
+            formik.touched.phoneNumber ? formik.errors.phoneNumber || '' : ''
+          }
         />
         <CustomButton
           btnTitleName={STRING_CONFIG.forgetPasswordString.mailSent}
           customStyle={{ marginTop: verticalScale(22) }}
-          onPress={() => _handlePhoneClick(phoneNumber)}
+          onPress={formik.handleSubmit}
         />
       </View>
     </AuthWrappers>

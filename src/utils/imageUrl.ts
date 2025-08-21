@@ -17,6 +17,9 @@ export const SVG_URL = {
   errorIcon: require('../assets/svg/error.svg').default,
   confirmPassword: require('../assets/svg/password.svg').default,
   successIcon: require('../assets/svg/success.svg').default,
+  cameraIcon: require('../assets/svg/camera.svg').default,
+  galleryIcon: require('../assets/svg/galleryIcon.svg').default,
+  imagUploadIcon: require('../assets/svg/imagupload.svg').default,
 };
 
 export type IconName = keyof typeof SVG_URL;

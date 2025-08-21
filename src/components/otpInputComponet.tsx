@@ -16,6 +16,8 @@ export interface OTPInputRef {
   focus: () => void;
 }
 
+
+
 const OTPInput = forwardRef<OTPInputRef, OTPInputProps>(
   ({ length = 6, onChangeOTP }, ref) => {
     const [otp, setOtp] = useState<string[]>(Array(length).fill(''));
@@ -37,13 +39,17 @@ const OTPInput = forwardRef<OTPInputRef, OTPInputProps>(
       setOtp(newOtp);
       onChangeOTP?.(newOtp.join(''));
 
-      // Move to next
+      // Move to next input if a digit is entered
       if (text && index < length - 1) {
         inputsRef.current[index + 1]?.focus();
       }
+    };
 
-      // Backspace to previous
-      if (!text && index > 0) {
+    // This is the new function to handle backspace
+    const handleKeyPress = ({ nativeEvent: { key } }: any, index: number) => {
+      // If the pressed key is backspace and the current input is empty,
+      // move the focus to the previous input.
+      if (key === 'Backspace' && !otp[index] && index > 0) {
         inputsRef.current[index - 1]?.focus();
       }
     };
@@ -58,6 +64,7 @@ const OTPInput = forwardRef<OTPInputRef, OTPInputProps>(
             }}
             value={digit}
             onChangeText={text => handleChange(text, index)}
+            onKeyPress={e => handleKeyPress(e, index)}
             style={styles.input}
             maxLength={1}
             keyboardType="number-pad"

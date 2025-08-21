@@ -5,36 +5,40 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import AuthWrappers from '../../components/wrappers/authWrappers';
 import { moderateScale, scale, verticalScale } from '../../helpers/dimentions';
 import { STRING_CONFIG } from '../../utils/stringConfig';
 import { COLORS } from '../../utils/colorConstant';
 import OTPInput, { OTPInputRef } from '../../components/otpInputComponet';
 import CustomButton from '../../components/customButton';
-import { isEmptyCheck } from '../../helpers/validationsHook';
 import { NavigationConstant } from '../../utils/navConstant';
 import BottomSheetComponent from '../../components/bottomSheetComponent';
 import SvgIcon from '../../components/svgComponent';
-import { useFocusEffect } from '@react-navigation/native';
+
+import { useValidation } from '../../helpers/yupAdapter';
+import { VALID_OTP } from '../../helpers/validationsHook';
 
 const ForgetPassword = (props: any) => {
   let { phoneNumber } = props.route.params;
   const otpRef = useRef<OTPInputRef>(null);
-  const [otpValue, setOtpValue] = useState('');
+
   const [otpTimer, setTimer] = useState(60);
-  const [error, setError] = useState('');
+
   const [confirmError, setConfirmError] = useState('123456');
   const [showModal, setShowModal] = useState(false);
 
-  useFocusEffect(
-    useCallback(() => {
-      setOtpValue('');
-      setTimer(60);
-      setError('');
-      otpRef.current?.clear();
-    }, []),
-  );
+  const formik = useValidation({
+    initialValues: { otpNumber: '' },
+    validationSchema: VALID_OTP,
+    onSubmit: values => {
+      if (confirmError === values.otpNumber) {
+        props.navigation.navigate(NavigationConstant.CHANGE_PASSWORD_SCREEN);
+      } else {
+        setShowModal(true);
+      }
+    },
+  });
 
   useEffect(() => {
     if (otpTimer === 0) return;
@@ -50,16 +54,6 @@ const ForgetPassword = (props: any) => {
     otpRef.current?.clear(); // clear OTP and auto focus first input
     setTimer(60); // restart timer
   }
-
-  const _handleVerify = (otp: string) => {
-    if (isEmptyCheck(otp)) {
-      setError(STRING_CONFIG.errorText.otpEmptyError);
-    } else if (confirmError === otp) {
-      props.navigation.navigate(NavigationConstant.CHANGE_PASSWORD_SCREEN);
-    } else {
-      setShowModal(true);
-    }
-  };
   const _handleOnCancelModal = () => {
     setShowModal(!showModal);
   };
@@ -87,10 +81,10 @@ const ForgetPassword = (props: any) => {
           <OTPInput
             length={6}
             ref={otpRef}
-            onChangeOTP={otp => setOtpValue(otp)}
+            onChangeOTP={formik.handleChange('otpNumber')}
           />
-          {error.length !== 0 && (
-            <Text style={styles.errorMessage}>{error}</Text>
+          {formik.touched.otpNumber && (
+            <Text style={styles.errorMessage}>{formik.errors.otpNumber}</Text>
           )}
           {/* Timer & Resend */}
           <View style={styles.timerWrapper}>
@@ -113,7 +107,7 @@ const ForgetPassword = (props: any) => {
           <CustomButton
             btnTitleName="Verify Otp"
             customStyle={{ marginVertical: verticalScale(12) }}
-            onPress={() => _handleVerify(otpValue)}
+            onPress={formik.handleSubmit}
           />
         </View>
       </AuthWrappers>
@@ -133,7 +127,7 @@ const ForgetPassword = (props: any) => {
             />
             <View style={styles.contentView}>
               <Text style={styles.messageText}>
-                {STRING_CONFIG.modalText.errorNetworkModal.headerOne}
+                {STRING_CONFIG.modalText.errorNetworkModal.otpHeader}
               </Text>
               <Text style={styles.messageSubText}>
                 {STRING_CONFIG.modalText.errorNetworkModal.otpError}
@@ -170,6 +164,7 @@ const styles = StyleSheet.create({
   },
   subHeading: {
     color: COLORS.shadesOfGrey.greyOne,
+    marginTop: verticalScale(12),
   },
   timerWrapper: {
     alignItems: 'center',
@@ -219,11 +214,12 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   messageSubText: {
-    fontSize: moderateScale(20),
-    color: COLORS.shadesOfGrey.greyOne,
+    fontSize: moderateScale(18),
+    color: COLORS.red,
     fontWeight: '700',
     textAlign: 'center',
     textTransform: 'capitalize',
+    marginTop: verticalScale(12),
   },
   contentView: {
     marginVertical: verticalScale(16),

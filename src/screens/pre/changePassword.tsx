@@ -1,28 +1,33 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
 import AuthWrappers from '../../components/wrappers/authWrappers';
 import InputCompnent from '../../components/inputCompnent';
 import { STRING_CONFIG } from '../../utils/stringConfig';
 import CustomButton from '../../components/customButton';
 import { verticalScale } from '../../helpers/dimentions';
-import { isEmptyCheck } from '../../helpers/validationsHook';
 import BottomSheetComponent from '../../components/bottomSheetComponent';
 import SuccessBodySheet from '../../components/bottomSheetBody/successBodySheet';
 import FailureBodySHeet from '../../components/bottomSheetBody/failureBodySHeet';
 import { NavigationConstant } from '../../utils/navConstant';
+import { useValidation } from '../../helpers/yupAdapter';
+import { PASSWORD_SCHEMA } from '../../helpers/validationsHook';
 
 const ChangePassword = (props: any) => {
-  const [passwordData, setPasswordData] = useState({
-    password: '',
-    confirmPassword: '',
-  });
-  const [error, setError] = useState({
-    error: '',
-    emptyError: '',
-  });
   const [showModal, setShowModal] = useState({
     isSuccessModal: false,
     isFailure: false,
+  });
+
+  const formik = useValidation({
+    initialValues: { password: '', confirmPassword: '' },
+    validationSchema: PASSWORD_SCHEMA,
+    onSubmit: values => {
+      if (values.password === values.confirmPassword) {
+        setShowModal({ ...showModal, isSuccessModal: true });
+      } else {
+        setShowModal({ ...showModal, isFailure: true });
+      }
+    },
   });
 
   const _handleOnCancelModal = () => {
@@ -31,19 +36,6 @@ const ChangePassword = (props: any) => {
 
   const _handleOnCancelFailure = () => {
     setShowModal({ ...showModal, isFailure: false });
-  };
-
-  const _handleConfirmPassword = (passwordData: any) => {
-    if (
-      isEmptyCheck(passwordData.password) ||
-      isEmptyCheck(passwordData.confirmPassword)
-    ) {
-      setError({ ...error, emptyError: STRING_CONFIG.errorText.passwordError });
-    } else if (passwordData.password === passwordData.confirmPassword) {
-      setShowModal({ ...showModal, isSuccessModal: true });
-    } else {
-      setShowModal({ ...showModal, isFailure: true });
-    }
   };
 
   const _handleLoginButton = () => {
@@ -61,26 +53,28 @@ const ChangePassword = (props: any) => {
       >
         <View>
           <InputCompnent
-            value={passwordData.password}
-            onChangeText={text =>
-              setPasswordData({ ...passwordData, password: text })
-            }
+            value={formik.values.password}
+            onChangeText={formik.handleChange('password')}
             placeHolder={STRING_CONFIG.basicInfoString.password}
             inputView={{ marginVertical: verticalScale(22) }}
-            errorMessage={error.emptyError}
+            errorMessage={
+              formik.touched.password ? formik.errors.password || '' : ''
+            }
           />
           <InputCompnent
-            value={passwordData.confirmPassword}
-            onChangeText={text =>
-              setPasswordData({ ...passwordData, confirmPassword: text })
-            }
+            value={formik.values.confirmPassword}
+            onChangeText={formik.handleChange('confirmPassword')}
             placeHolder={STRING_CONFIG.basicInfoString.confirmPassword}
-            errorMessage={error.emptyError}
+            errorMessage={
+              formik.touched.confirmPassword
+                ? formik.errors.confirmPassword || ''
+                : ''
+            }
           />
           <CustomButton
             btnTitleName="Confirm Password"
             customStyle={{ marginTop: verticalScale(22) }}
-            onPress={() => _handleConfirmPassword(passwordData)}
+            onPress={formik.handleSubmit}
           />
         </View>
       </AuthWrappers>

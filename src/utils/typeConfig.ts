@@ -12,3 +12,6 @@ export type KeyboardType =
   | 'name-phone-pad'
   | 'twitter'
   | 'web-search';
+
+
+  export type ImagePickerFrom = 'camera' | 'gallery' | 'both';
