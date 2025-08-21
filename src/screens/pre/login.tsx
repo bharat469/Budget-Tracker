@@ -5,7 +5,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AuthWrappers from '../../components/wrappers/authWrappers';
 import InputCompnent from '../../components/inputCompnent';
 import { moderateScale, verticalScale, scale } from '../../helpers/dimentions';
@@ -17,23 +17,36 @@ import SvgIcon from '../../components/svgComponent';
 import { NavigationConstant } from '../../utils/navConstant';
 import BottomSheetComponent from '../../components/bottomSheetComponent';
 import { LOGIN_SCHEMA } from '../../helpers/validationsHook';
-
+import { useDispatch, useSelector } from 'react-redux';
 import { useValidation } from '../../helpers/yupAdapter';
+import {
+  loginWithEmailPassword,
+  resetAll,
+} from '../../helpers/redux/slice/authSlice';
+import { RootState } from '../../helpers/redux/store';
 
 const Login = (props: any) => {
+  const dispatch = useDispatch();
   const formik = useValidation({
     initialValues: { email: '', password: '' },
     validationSchema: LOGIN_SCHEMA,
     onSubmit: values => {
-      console.log('submited', values);
+      dispatch(loginWithEmailPassword(values));
     },
   });
+
+  const { error } = useSelector((state: RootState) => state.auth);
 
   const [isShowModal, setShowModal] = useState(false);
 
   const _handleOnCancelModal = () => {
     setShowModal(!isShowModal);
+    dispatch(resetAll());
   };
+
+  useEffect(() => {
+    setShowModal(!!error); // will show modal if error is not null/empty
+  }, [error]);
 
   return (
     <>
@@ -252,13 +265,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   messageSubText: {
-    fontSize: moderateScale(20),
-    color: COLORS.shadesOfGrey.greyOne,
+    fontSize: moderateScale(18),
+    color: COLORS.red,
     fontWeight: '700',
     textAlign: 'center',
+    textTransform: 'capitalize',
+    marginVertical: verticalScale(8),
   },
   contentView: {
     marginVertical: verticalScale(16),
+    marginHorizontal: scale(12),
   },
   siginUpView: {
     color: COLORS.primaryColor,

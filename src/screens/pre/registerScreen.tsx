@@ -8,13 +8,21 @@ import InputCompnent from '../../components/inputCompnent';
 import CustomButton from '../../components/customButton';
 import { useValidation } from '../../helpers/yupAdapter';
 import { REGISTER_SCHEMA } from '../../helpers/validationsHook';
+import { useDispatch } from 'react-redux';
+import { registerWithEmailPassword } from '../../helpers/redux/slice/authSlice';
 
 const RegisterScreen = (props: any) => {
+  const dispatch = useDispatch();
   const formik = useValidation({
     initialValues: { name: '', Email: '', password: '', confirmPassword: '' },
     validationSchema: REGISTER_SCHEMA,
     onSubmit: values => {
-      console.log('submited', values);
+      if (values.password === values.confirmPassword) {
+        const data = { email: values.Email, password: values.password };
+        dispatch(registerWithEmailPassword(data));
+      } else {
+        formik.setFieldError('confirmPassword', 'Passwords do not match');
+      }
     },
   });
 
