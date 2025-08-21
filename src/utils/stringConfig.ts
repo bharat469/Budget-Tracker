@@ -47,7 +47,7 @@ export const STRING_CONFIG = {
   modalText: {
     errorNetworkModal: {
       headerOne: 'Something went wrong.',
-      headerTwo: 'Please enter Email And Password',
+      headerTwo: 'Invalid Email or Password please retry',
       btnText: 'Try Again',
       otpHeader: 'OTP verification failed',
       otpError: 'Please check the code and try again*',

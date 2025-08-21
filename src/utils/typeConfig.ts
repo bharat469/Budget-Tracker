@@ -15,3 +15,8 @@ export type KeyboardType =
 
 
   export type ImagePickerFrom = 'camera' | 'gallery' | 'both';
+
+  export type Authtentication = {
+    email: string;
+    password: string;
+  };
