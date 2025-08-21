@@ -15,109 +15,168 @@ import { STRING_CONFIG } from '../../utils/stringConfig';
 import DividerWithText from '../../helpers/dividerWithText';
 import SvgIcon from '../../components/svgComponent';
 import { NavigationConstant } from '../../utils/navConstant';
+import BottomSheetComponent from '../../components/bottomSheetComponent';
+import { LOGIN_SCHEMA } from '../../helpers/validationsHook';
+
+import { useValidation } from '../../helpers/yupAdapter';
 
 const Login = (props: any) => {
-  const [loginData, setLoginData] = useState({
-    email: '',
-    password: '',
+  const formik = useValidation({
+    initialValues: { email: '', password: '' },
+    validationSchema: LOGIN_SCHEMA,
+    onSubmit: values => {
+      console.log('submited', values);
+    },
   });
 
-  const _handleChangeText = () => {};
+  const [isShowModal, setShowModal] = useState(false);
+
+  const _handleOnCancelModal = () => {
+    setShowModal(!isShowModal);
+  };
 
   return (
-    <AuthWrappers isSvgShow={true}>
-      <View style={styles.innerView}>
-        <View style={styles.textView}>
-          <Text style={styles.headerText}>
-            {STRING_CONFIG.authScreenString.welcomeText}
-          </Text>
-          <Text style={styles.subText}>
-            {STRING_CONFIG.authScreenString.welcomeSubText}
-          </Text>
-        </View>
-        <InputCompnent
-          placeHolder={STRING_CONFIG.basicInfoString.emailAddress}
-          value={loginData.email}
-          onChangeText={(data: string) =>
-            setLoginData({ ...loginData, email: data })
-          }
-          containerStyle={styles.inputContainerStyle}
-        />
-        <InputCompnent
-          placeHolder={STRING_CONFIG.basicInfoString.password}
-          value={loginData.password}
-          onChangeText={(data: string) =>
-            setLoginData({ ...loginData, password: data })
-          }
-          secureEntry={true}
-          isShowLeftIcon={true}
-          containerStyle={styles.passwordContainer}
-          inputStyle={{ flex: 1 }}
-        />
-        <CustomButton
-          btnTitleName={STRING_CONFIG.authScreenString.siginBtnText}
-          customStyle={styles.buttonStyle}
-        />
+    <>
+      <AuthWrappers isSvgShow={true}>
         <View>
-          <TouchableWithoutFeedback
-            onPress={() =>
-              props.navigation.navigate(
-                NavigationConstant.FORGOT_PASSWORD_SCREEN,
-              )
-            }
-          >
-            <Text style={styles.forgetText}>
-              {STRING_CONFIG.authScreenString.forgetPasswordText}
+          <View style={styles.textView}>
+            <Text style={styles.headerText}>
+              {STRING_CONFIG.authScreenString.welcomeText}
             </Text>
-          </TouchableWithoutFeedback>
-
-          <DividerWithText
-            textTitle={STRING_CONFIG.authScreenString.footerText}
+            <Text style={styles.subText}>
+              {STRING_CONFIG.authScreenString.welcomeSubText}
+            </Text>
+          </View>
+          <InputCompnent
+            placeHolder={STRING_CONFIG.basicInfoString.emailAddress}
+            value={formik.values.email}
+            onChangeText={formik.handleChange('email')}
+            inputView={styles.inputContainerStyle}
+            errorMessage={formik.touched.email ? formik.errors.email || '' : ''}
+            keyBoardType="email-address"
           />
-          <View style={styles.footerContainer}>
-            <TouchableOpacity style={styles.socialContainer}>
-              <SvgIcon
-                name="goggleSvgIcon"
-                width={scale(30)}
-                height={verticalScale(30)}
-              />
-              <Text style={styles.socialText}>
-                {STRING_CONFIG.authScreenString.goggleText}
-              </Text>
-            </TouchableOpacity>
 
-            <TouchableOpacity style={styles.socialContainer}>
-              <SvgIcon
-                name="facebookSvgIcon"
-                width={scale(30)}
-                height={verticalScale(30)}
-              />
-              <Text style={styles.socialText}>
-                {STRING_CONFIG.authScreenString.FaceBookText}
+          <InputCompnent
+            placeHolder={STRING_CONFIG.basicInfoString.password}
+            value={formik.values.password}
+            onChangeText={formik.handleChange('password')}
+            secureEntry={true}
+            isShowLeftIcon={true}
+            containerStyle={styles.passwordContainer}
+            inputStyle={{ flex: 1 }}
+            errorMessage={
+              formik.touched.password ? formik.errors.password || '' : ''
+            }
+          />
+          <CustomButton
+            btnTitleName={STRING_CONFIG.authScreenString.siginBtnText}
+            customStyle={styles.buttonStyle}
+            onPress={formik.handleSubmit as any}
+          />
+          <View>
+            <TouchableWithoutFeedback
+              onPress={() =>
+                props.navigation.navigate(
+                  NavigationConstant.FORGOT_PASSWORD_EMAIL_SCREEN,
+                )
+              }
+            >
+              <Text style={styles.forgetText}>
+                {STRING_CONFIG.authScreenString.forgetPasswordText}
               </Text>
-            </TouchableOpacity>
+            </TouchableWithoutFeedback>
+
+            <DividerWithText
+              textTitle={STRING_CONFIG.authScreenString.footerText}
+            />
+            <View style={styles.footerContainer}>
+              <TouchableOpacity style={styles.socialContainer}>
+                <SvgIcon
+                  name="goggleSvgIcon"
+                  width={scale(30)}
+                  height={verticalScale(30)}
+                />
+                <Text style={styles.socialText}>
+                  {STRING_CONFIG.authScreenString.goggleText}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.socialContainer}>
+                <SvgIcon
+                  name="facebookSvgIcon"
+                  width={scale(30)}
+                  height={verticalScale(30)}
+                />
+                <Text style={styles.socialText}>
+                  {STRING_CONFIG.authScreenString.FaceBookText}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={[styles.forgetText, { marginVertical: verticalScale(12) }]}
+            >
+              {STRING_CONFIG.authScreenString.signUpText}
+              <TouchableWithoutFeedback
+                onPress={() =>
+                  props.navigation.navigate(
+                    NavigationConstant.PROFILE_PICTURE_SCREEN,
+                  )
+                }
+              >
+                <Text style={styles.siginUpView}>
+                  {STRING_CONFIG.authScreenString.siginUpButton}
+                </Text>
+              </TouchableWithoutFeedback>
+            </Text>
           </View>
         </View>
-      </View>
-    </AuthWrappers>
+      </AuthWrappers>
+      <BottomSheetComponent
+        isVisible={isShowModal}
+        onBackdropPress={_handleOnCancelModal}
+      >
+        <View style={styles.bottomSheetView}>
+          <TouchableWithoutFeedback onPress={_handleOnCancelModal}>
+            <Text style={styles.closeText}>X</Text>
+          </TouchableWithoutFeedback>
+          <View style={styles.content}>
+            <SvgIcon
+              name="errorIcon"
+              width={scale(200)}
+              height={verticalScale(200)}
+            />
+            <View style={styles.contentView}>
+              <Text style={styles.messageText}>
+                {STRING_CONFIG.modalText.errorNetworkModal.headerOne}
+              </Text>
+              <Text style={styles.messageSubText}>
+                {STRING_CONFIG.modalText.errorNetworkModal.headerTwo}
+              </Text>
+            </View>
+          </View>
+          <CustomButton
+            btnTitleName={STRING_CONFIG.modalText.errorNetworkModal.btnText}
+            customStyle={{ marginVertical: verticalScale(22) }}
+            onPress={_handleOnCancelModal}
+          />
+        </View>
+      </BottomSheetComponent>
+    </>
   );
 };
 
 export default Login;
 
 const styles = StyleSheet.create({
-  innerView: {
-    // alignItems: 'center',
-  },
   inputContainerStyle: {
-    marginVertical: moderateScale(22),
+    marginVertical: moderateScale(12),
   },
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   buttonStyle: {
-    marginVertical: moderateScale(22),
+    marginVertical: moderateScale(12),
   },
   textView: {
     alignItems: 'center',
@@ -143,6 +202,7 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(12),
     color: COLORS.shadesOfGrey.greyOne,
     fontWeight: '700',
+    textTransform: 'capitalize',
   },
   footerContainer: {
     flexDirection: 'row',
@@ -165,5 +225,42 @@ const styles = StyleSheet.create({
     color: COLORS.primaryColor,
     fontWeight: '600',
     letterSpacing: 0.4,
+  },
+  bottomSheetView: {
+    backgroundColor: COLORS.white,
+    borderTopLeftRadius: moderateScale(20),
+    borderTopRightRadius: moderateScale(20),
+    padding: moderateScale(20),
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  closeText: {
+    alignSelf: 'flex-end',
+    fontSize: moderateScale(20),
+    fontWeight: '700',
+    color: COLORS.primaryColor,
+  },
+  content: {
+    alignItems: 'center',
+  },
+  messageText: {
+    fontSize: moderateScale(20),
+    color: COLORS.black,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  messageSubText: {
+    fontSize: moderateScale(20),
+    color: COLORS.shadesOfGrey.greyOne,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  contentView: {
+    marginVertical: verticalScale(16),
+  },
+  siginUpView: {
+    color: COLORS.primaryColor,
   },
 });

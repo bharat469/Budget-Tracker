@@ -1,30 +1,84 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback, // 🔥 FIX (replaced TouchableWithoutFeedback)
+  View,
+} from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { COLORS } from '../../utils/colorConstant';
 import SvgIcon from '../../components/svgComponent';
-import {
-  moderateScale,
-  scale,
-  SCREEN,
-  verticalScale,
-} from '../../helpers/dimentions';
+import { moderateScale, scale, verticalScale } from '../../helpers/dimentions';
 import { STRING_CONFIG } from '../../utils/stringConfig';
 import CustomButton from '../../components/customButton';
 import { NavigationConstant } from '../../utils/navConstant';
+import ImagePicker from 'react-native-image-crop-picker';
+import BottomSheetComponent from '../../components/bottomSheetComponent';
+import PickerBodySheet from '../../components/bottomSheetBody/pickerBodySheet';
+import SuccessBodySheet from '../../components/bottomSheetBody/successBodySheet';
+import ImageSuccess from '../../components/bottomSheetBody/imageSuccess';
 
 const ProfilePictureScreen = (props: any) => {
+  const [showModal, setShowModal] = useState({
+    imagePicker: false,
+    success: false,
+  });
+
+  const [profilePic, setProfilePic] = useState('');
+
+  const _handleCancelModal = () => {
+    setShowModal(prev => ({ ...prev, imagePicker: false }));
+  };
+
+  const _openCamera = async () => {
+    try {
+      const image = await ImagePicker.openCamera({
+        width: 300,
+        height: 300,
+        cropping: true,
+      });
+      setProfilePic(image.path);
+      setShowModal({ ...showModal, imagePicker: false });
+    } catch (e: any) {
+      if (e.code !== 'E_PICKER_CANCELLED') console.log('Camera error:', e);
+    }
+  };
+
+  const _openGallery = async () => {
+    try {
+      const image = await ImagePicker.openPicker({
+        width: 300,
+        height: 300,
+        cropping: true,
+      });
+      setProfilePic(image.path);
+      setShowModal({ ...showModal, imagePicker: false });
+    } catch (e: any) {
+      if (e.code !== 'E_PICKER_CANCELLED') console.log('Gallery error:', e);
+    }
+  };
+
   const _handleButtonClick = () => {
+    setShowModal(prev => ({ ...prev, imagePicker: true }));
+  };
+
+  const _handleNavigation = () => {
     props.navigation.navigate(NavigationConstant.REGISTER_SCREEN);
   };
 
   return (
     <View style={styles.onBoardingStyle}>
       <View style={styles.firstContainer}>
-        <SvgIcon
-          name="getProfilePicIcon"
-          width={scale(300)}
-          height={verticalScale(300)}
-        />
+        {profilePic ? (
+          <Image source={{ uri: profilePic }} style={styles.profilePicStyle} />
+        ) : (
+          <SvgIcon
+            name="getProfilePicIcon"
+            width={scale(300)}
+            height={verticalScale(300)}
+          />
+        )}
       </View>
       <View>
         <View style={styles.innerContainer}>
@@ -40,7 +94,39 @@ const ProfilePictureScreen = (props: any) => {
           customStyle={{ marginVertical: moderateScale(20) }}
           onPress={_handleButtonClick}
         />
+        {profilePic && (
+          <CustomButton
+            btnTitleName={STRING_CONFIG.imagePickerText.ButtonText}
+            onPress={_handleNavigation}
+          />
+        )}
+
+        <Text
+          style={[styles.forgetText, { marginVertical: verticalScale(12) }]}
+        >
+          {STRING_CONFIG.authScreenString.loginNavText}
+          <TouchableWithoutFeedback
+            onPress={() =>
+              props.navigation.navigate(NavigationConstant.LOGIN_SCREEN)
+            }
+          >
+            <Text style={styles.siginUpView}>
+              {STRING_CONFIG.authScreenString.siginBtnText}
+            </Text>
+          </TouchableWithoutFeedback>
+        </Text>
       </View>
+      <BottomSheetComponent
+        isVisible={showModal.imagePicker}
+        onBackButtonPress={_handleCancelModal}
+        onBackdropPress={_handleCancelModal}
+      >
+        <PickerBodySheet
+          _handleOnCancelModal={_handleCancelModal}
+          _handleOpenCamera={_openCamera}
+          _handleOpenGallery={_openGallery}
+        />
+      </BottomSheetComponent>
     </View>
   );
 };
@@ -57,7 +143,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: verticalScale(22),
   },
-
   innerContainer: {
     alignItems: 'center',
   },
@@ -74,5 +159,23 @@ const styles = StyleSheet.create({
     color: COLORS.shadesOfGrey.greyOne,
     marginHorizontal: scale(22),
     marginVertical: verticalScale(22),
+  },
+  forgetText: {
+    textAlign: 'center',
+    fontSize: moderateScale(16),
+    marginBottom: verticalScale(12),
+    color: COLORS.shadesOfGrey.greyOne,
+    fontWeight: '700',
+    textTransform: 'capitalize',
+  },
+  siginUpView: {
+    color: COLORS.primaryColor,
+  },
+  profilePicStyle: {
+    width: scale(200),
+    height: verticalScale(200),
+    borderRadius: moderateScale(100),
+    borderWidth: 5,
+    borderColor: COLORS.shadesOfGrey.greyOne,
   },
 });

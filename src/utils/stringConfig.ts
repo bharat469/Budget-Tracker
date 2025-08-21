@@ -17,7 +17,10 @@ export const STRING_CONFIG = {
     footerText: 'Or sign in with ',
     goggleText: 'Google',
     FaceBookText: 'Facebook',
-    forgetPasswordHeaderText: 'We’ve sent a 6-digit code to your email',
+    forgetPasswordHeaderText: 'We’ve sent a 6-digit code to your Number',
+    signUpText: ` Don't have an account? `,
+    siginUpButton: 'Create an account',
+    loginNavText: 'Already have an account? ',
   },
   RegisterScreenString: {
     openCameraBtnText: 'Say Cheese 📸',
@@ -33,5 +36,45 @@ export const STRING_CONFIG = {
     phoneNumber: 'Enter your phone number',
     password: 'Create a password',
     confirmPassword: 'Re-enter your password',
+  },
+  forgetPasswordString: {
+    header: 'Forgot Password',
+    headerOne: 'Please enter your Phone Number To ',
+    headerTwo: 'receive a verification code',
+    mailSent: 'Send',
+    resendText: `if you didn't receive a code?`,
+  },
+  modalText: {
+    errorNetworkModal: {
+      headerOne: 'Something went wrong.',
+      headerTwo: 'Please enter Email And Password',
+      btnText: 'Try Again',
+      otpHeader: 'OTP verification failed',
+      otpError: 'Please check the code and try again*',
+      successHeader: 'congratulations',
+      successFooter: '🎉 Password reset successful',
+      passwordFailure: 'Password and confirm password do not match',
+    },
+  },
+  errorText: {
+    emailError: 'Please enter proper Email format',
+    passwordError:
+      'Password must contain uppercase, lowercase, number, and special character',
+
+    empty: {
+      Email: 'Email is required*',
+      Password: 'Password is required*',
+      Otp: 'Otp is required*',
+      phone: 'Phone Number Is Required*',
+      name: 'Full Name is Required*',
+    },
+    phoneError: 'Please enter a valid phone number',
+    minPhoneError: 'Please enter a 10-digit phone number.',
+  },
+  imagePickerText: {
+    headerOne: 'Congratulations 🎉',
+    headerTwo: 'Image Upload Successfull ✅',
+    ButtonText: 'More Detail ✨✨',
+    tryAgain: 'Try Again 💔 💔',
   },
 };

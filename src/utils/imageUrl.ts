@@ -11,6 +11,15 @@ export const SVG_URL = {
   getProfilePicIcon: require('../assets/svg/picture.svg').default,
   registerSvgIcon: require('../assets/svg/register.svg').default,
   mailSentSvgIcon: require('../assets/svg/mailSent.svg').default,
+  emailConfirmIcon: require('../assets/svg/email.svg').default,
+  leftChevronIcon: require('../assets/svg/chevronLeft.svg').default,
+  downloadIcon: require('../assets/svg/download.svg').default,
+  errorIcon: require('../assets/svg/error.svg').default,
+  confirmPassword: require('../assets/svg/password.svg').default,
+  successIcon: require('../assets/svg/success.svg').default,
+  cameraIcon: require('../assets/svg/camera.svg').default,
+  galleryIcon: require('../assets/svg/galleryIcon.svg').default,
+  imagUploadIcon: require('../assets/svg/imagupload.svg').default,
 };
 
 export type IconName = keyof typeof SVG_URL;

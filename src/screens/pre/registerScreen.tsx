@@ -6,19 +6,25 @@ import { moderateScale, verticalScale } from '../../helpers/dimentions';
 import { COLORS } from '../../utils/colorConstant';
 import InputCompnent from '../../components/inputCompnent';
 import CustomButton from '../../components/customButton';
+import { useValidation } from '../../helpers/yupAdapter';
+import { REGISTER_SCHEMA } from '../../helpers/validationsHook';
 
 const RegisterScreen = (props: any) => {
-  const [registerData, setRegisterData] = useState({
-    name: '',
-    Email: '',
-    password: '',
-    confirmPassword: '',
+  const formik = useValidation({
+    initialValues: { name: '', Email: '', password: '', confirmPassword: '' },
+    validationSchema: REGISTER_SCHEMA,
+    onSubmit: values => {
+      console.log('submited', values);
+    },
   });
+
   return (
     <AuthWrappers
       isSvgShow={true}
       svgIconName="registerSvgIcon"
       headingText={STRING_CONFIG.RegisterScreenString.RegisterHeading}
+      showHeader
+      headerTitle="Register Screen"
     >
       <View style={styles.textView}>
         <Text style={styles.headerText}>
@@ -26,32 +32,39 @@ const RegisterScreen = (props: any) => {
         </Text>
       </View>
       <InputCompnent
-        value={registerData.name}
-        onChangeText={text => setRegisterData({ ...registerData, name: text })}
+        value={formik.values.name}
+        onChangeText={formik.handleChange('name')}
         placeHolder={STRING_CONFIG.basicInfoString.fullName}
-        containerStyle={{ marginVertical: moderateScale(12) }}
+        errorMessage={formik.touched.name ? formik.errors.name : ''}
+        containerStyle={{ marginTop: verticalScale(12) }}
       />
       <InputCompnent
-        value={registerData.name}
-        onChangeText={text => setRegisterData({ ...registerData, name: text })}
+        value={formik.values.Email}
+        onChangeText={formik.handleChange('Email')}
         placeHolder={STRING_CONFIG.basicInfoString.emailAddress}
-        containerStyle={{ marginVertical: moderateScale(12) }}
+        errorMessage={formik.touched.Email ? formik.errors.Email : ''}
+        containerStyle={{ marginTop: verticalScale(12) }}
       />
       <InputCompnent
-        value={registerData.name}
-        onChangeText={text => setRegisterData({ ...registerData, name: text })}
+        value={formik.values.password}
+        onChangeText={formik.handleChange('password')}
         placeHolder={STRING_CONFIG.basicInfoString.password}
-        containerStyle={{ marginVertical: moderateScale(12) }}
+        errorMessage={formik.touched.password ? formik.errors.password : ''}
+        containerStyle={{ marginTop: verticalScale(12) }}
       />
       <InputCompnent
-        value={registerData.name}
-        onChangeText={text => setRegisterData({ ...registerData, name: text })}
+        value={formik.values.confirmPassword}
+        onChangeText={formik.handleChange('confirmPassword')}
         placeHolder={STRING_CONFIG.basicInfoString.confirmPassword}
-        containerStyle={{ marginVertical: moderateScale(12) }}
+        containerStyle={{ marginTop: verticalScale(12) }}
+        errorMessage={
+          formik.touched.confirmPassword ? formik.errors.confirmPassword : ''
+        }
       />
       <CustomButton
         btnTitleName={STRING_CONFIG.RegisterScreenString.RegisterBtnText}
         customStyle={{ marginVertical: verticalScale(12) }}
+        onPress={formik.handleSubmit}
       />
     </AuthWrappers>
   );
