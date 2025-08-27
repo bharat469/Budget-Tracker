@@ -8,18 +8,30 @@ import InputCompnent from '../../components/inputCompnent';
 import CustomButton from '../../components/customButton';
 import { useValidation } from '../../helpers/yupAdapter';
 import { REGISTER_SCHEMA } from '../../helpers/validationsHook';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { registerWithEmailPassword } from '../../helpers/redux/slice/authSlice';
+import { NavigationConstant } from '../../utils/navConstant';
+import { RootState } from '../../helpers/redux/store';
+import { startUserData } from '../../helpers/redux/slice/userSlice';
 
 const RegisterScreen = (props: any) => {
   const dispatch = useDispatch();
+  const { imageUrl } = useSelector((state: RootState) => state.userData);
   const formik = useValidation({
     initialValues: { name: '', Email: '', password: '', confirmPassword: '' },
     validationSchema: REGISTER_SCHEMA,
     onSubmit: values => {
       if (values.password === values.confirmPassword) {
-        const data = { email: values.Email, password: values.password };
-        dispatch(registerWithEmailPassword(data));
+        const data = {
+          name: values.name,
+          email: values.Email,
+          password: values.password,
+          profilePic: imageUrl,
+          isVerified: false,
+          isFirstTime: false,
+        };
+        dispatch(startUserData(data));
+        props.navigation.navigate(NavigationConstant.BLOCKED_SCREEN);
       } else {
         formik.setFieldError('confirmPassword', 'Passwords do not match');
       }

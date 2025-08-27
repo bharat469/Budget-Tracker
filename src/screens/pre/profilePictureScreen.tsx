@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   StyleSheet,
   Text,
@@ -18,14 +19,20 @@ import BottomSheetComponent from '../../components/bottomSheetComponent';
 import PickerBodySheet from '../../components/bottomSheetBody/pickerBodySheet';
 import SuccessBodySheet from '../../components/bottomSheetBody/successBodySheet';
 import ImageSuccess from '../../components/bottomSheetBody/imageSuccess';
+import { useDispatch, useSelector } from 'react-redux';
+import { startImageUpload } from '../../helpers/redux/slice/userSlice';
+import { RootState } from '../../helpers/redux/store';
 
 const ProfilePictureScreen = (props: any) => {
   const [showModal, setShowModal] = useState({
     imagePicker: false,
     success: false,
   });
-
+  const disptach = useDispatch();
   const [profilePic, setProfilePic] = useState('');
+  const { imageUploadLoading } = useSelector(
+    (state: RootState) => state.userData,
+  );
 
   const _handleCancelModal = () => {
     setShowModal(prev => ({ ...prev, imagePicker: false }));
@@ -39,6 +46,7 @@ const ProfilePictureScreen = (props: any) => {
         cropping: true,
       });
       setProfilePic(image.path);
+      disptach(startImageUpload(image?.path));
       setShowModal({ ...showModal, imagePicker: false });
     } catch (e: any) {
       if (e.code !== 'E_PICKER_CANCELLED') console.log('Camera error:', e);
@@ -53,6 +61,7 @@ const ProfilePictureScreen = (props: any) => {
         cropping: true,
       });
       setProfilePic(image.path);
+      disptach(startImageUpload(image?.path));
       setShowModal({ ...showModal, imagePicker: false });
     } catch (e: any) {
       if (e.code !== 'E_PICKER_CANCELLED') console.log('Gallery error:', e);
@@ -66,7 +75,20 @@ const ProfilePictureScreen = (props: any) => {
   const _handleNavigation = () => {
     props.navigation.navigate(NavigationConstant.REGISTER_SCREEN);
   };
-
+  if (imageUploadLoading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'transparent',
+        }}
+      >
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
   return (
     <View style={styles.onBoardingStyle}>
       <View style={styles.firstContainer}>

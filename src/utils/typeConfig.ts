@@ -20,3 +20,10 @@ export type KeyboardType =
     email: string;
     password: string;
   };
+  export type UserData = {
+    email: string;
+    password: string;
+    profilePic: Base64URLString;
+    isVerified: boolean;
+    isFirstTime: boolean;
+  };
