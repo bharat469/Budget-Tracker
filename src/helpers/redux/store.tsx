@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-
+import UserData from './slice/userSlice';
 import AuthReducer from './slice/authSlice';
 import { rootSaga } from './saga/rootSaga';
 
@@ -9,6 +9,7 @@ const sagaMiddleware = createSagaMiddleware();
 const store = configureStore({
   reducer: {
     auth: AuthReducer,
+    userData: UserData,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({ thunk: false, serializableCheck: false }).concat(

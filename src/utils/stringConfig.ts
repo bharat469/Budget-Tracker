@@ -70,6 +70,7 @@ export const STRING_CONFIG = {
     },
     phoneError: 'Please enter a valid phone number',
     minPhoneError: 'Please enter a 10-digit phone number.',
+    notVerified: 'Email not verified Verification link sent again.',
   },
   imagePickerText: {
     headerOne: 'Congratulations 🎉',

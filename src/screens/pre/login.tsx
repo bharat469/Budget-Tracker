@@ -45,7 +45,7 @@ const Login = (props: any) => {
   };
 
   useEffect(() => {
-    setShowModal(!!error); // will show modal if error is not null/empty
+    setShowModal(!!error);
   }, [error]);
 
   return (

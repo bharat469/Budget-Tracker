@@ -2,6 +2,7 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  sendEmailVerification,
 } from '@react-native-firebase/auth';
 import { Authtentication } from '../../../utils/typeConfig';
 
@@ -17,7 +18,6 @@ export const LoginApi = async (payload: Authtentication) => {
     if (response && response.user) {
       return response.user;
     }
-
     return null; // in case no user is returned
   } catch (error) {
     if (error instanceof Error) {
