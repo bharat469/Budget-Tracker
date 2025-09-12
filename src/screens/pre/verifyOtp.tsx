@@ -18,37 +18,51 @@ import SvgIcon from '../../components/svgComponent';
 
 import { useValidation } from '../../helpers/yupAdapter';
 import { VALID_OTP } from '../../helpers/validationsHook';
+import { useDispatch, useSelector } from 'react-redux';
+import { VerifyOtpApi } from '../../helpers/redux/api/authApi';
+import {
+  PhoneAuthentication,
+  VerifyAuthentication,
+} from '../../utils/typeConfig';
+import { resetAll, verifyOtpStart } from '../../helpers/redux/slice/authSlice';
+import { RootState } from '../../helpers/redux/store';
 
-const ForgetPassword = (props: any) => {
+const VerifyOtpScreen = (props: any) => {
   let { phoneNumber } = props.route.params;
   const otpRef = useRef<OTPInputRef>(null);
+  const dispatch = useDispatch();
+  const { verifyError, loginData } = useSelector(
+    (state: RootState) => state.auth,
+  );
 
   const [otpTimer, setTimer] = useState(60);
 
-  const [confirmError, setConfirmError] = useState('123456');
   const [showModal, setShowModal] = useState(false);
 
   const formik = useValidation({
-    initialValues: { otpNumber: '' },
+    initialValues: { otpNumber: '', verificationId: '' },
     validationSchema: VALID_OTP,
-    onSubmit: values => {
-      if (confirmError === values.otpNumber) {
-        props.navigation.navigate(NavigationConstant.CHANGE_PASSWORD_SCREEN);
-      } else {
-        setShowModal(true);
-      }
+    onSubmit: (values: VerifyAuthentication) => {
+      const payload = {
+        otpNumber: values.otpNumber,
+        verificationId: `${loginData}`, // prefix before sending
+      };
+      dispatch(verifyOtpStart(payload));
     },
   });
-
   useEffect(() => {
-    if (otpTimer === 0) return;
+    setShowModal(!!verifyError);
+  }, [verifyError]);
 
-    const interval = setInterval(() => {
-      setTimer(prev => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
+  // useEffect(() => {
+  //   if (otpTimer === 0) return;
 
-    return () => clearInterval(interval);
-  }, [otpTimer]);
+  //   const interval = setInterval(() => {
+  //     setTimer(prev => (prev > 0 ? prev - 1 : 0));
+  //   }, 1000);
+
+  //   return () => clearInterval(interval);
+  // }, [otpTimer]);
 
   function handleResend(): void {
     otpRef.current?.clear(); // clear OTP and auto focus first input
@@ -56,6 +70,7 @@ const ForgetPassword = (props: any) => {
   }
   const _handleOnCancelModal = () => {
     setShowModal(!showModal);
+    dispatch(resetAll());
   };
 
   return (
@@ -145,7 +160,7 @@ const ForgetPassword = (props: any) => {
   );
 };
 
-export default ForgetPassword;
+export default VerifyOtpScreen;
 
 const styles = StyleSheet.create({
   authWrapperCustomStyle: {

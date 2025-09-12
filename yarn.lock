@@ -2004,17 +2004,17 @@
     prompts "^2.4.2"
     semver "^7.5.2"
 
-"@react-native-firebase/app@^23.1.2":
+"@react-native-firebase/app@23.1.2":
   version "23.1.2"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-23.1.2.tgz#37dbb8df83194ffb4012672da077e24edc9acfbf"
   integrity sha512-GqnMjUvWZ7TzUvjbkuSa+5zOZVPz3jKOCp42tg3Fvxqu7fbw/M0P/SADHnTpoQaDvjf5FhJ7TGNhmB5+tjJ9yA==
   dependencies:
     firebase "12.1.0"
 
-"@react-native-firebase/auth@^23.1.0":
-  version "23.1.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-23.1.0.tgz#cad4c91661832cf99e07dfe0754af074e0878e0a"
-  integrity sha512-p4h1CD1c2cgMFuUYftw53ol9k434iH0X0xriymJmVFEmW1tezMaW5PfmlJTgdiDnF7ac9+t5hV8C433XGFaNEw==
+"@react-native-firebase/auth@23.1.2":
+  version "23.1.2"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-23.1.2.tgz#864719512d16e7298ee2653da3d8c1f5c6560da0"
+  integrity sha512-AvL8ZtDs3JChE+MtZi9MT6+Iu7Cjkd4YRV8NpKyHblUn+vQozeXTsmj95/7fBP+VzUQAf/In4ARlOk3ye2j9Cg==
   dependencies:
     plist "^3.1.0"
 
@@ -2029,6 +2029,11 @@
   version "23.1.2"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/storage/-/storage-23.1.2.tgz#6cf9151d1e02c4ab57652919c64b3c38c9230a67"
   integrity sha512-uECbt6JKpduNL7WojcDwJtRapxwlIJq1ZWQjtIXisjDB9aSl8kiGnNrJ2/Nitpxiq+NYAWzaZLt2vp06hNOY0w==
+
+"@react-native-google-signin/google-signin@^15.0.0":
+  version "15.0.0"
+  resolved "https://registry.yarnpkg.com/@react-native-google-signin/google-signin/-/google-signin-15.0.0.tgz#5041e12fc5483d4b08b92d3f9a754c68c471f107"
+  integrity sha512-oU49nE+Z9TT/WaO1K7BH/QL2Nx3d2T3I5PGcYdD8swKNtfhMt8qCX/3mOnNEzthTBPrR0CWFGo3LXpkYspalog==
 
 "@react-native/assets-registry@0.80.2":
   version "0.80.2"
@@ -3749,6 +3754,11 @@ dot-case@^3.0.4:
   dependencies:
     no-case "^3.0.4"
     tslib "^2.0.3"
+
+dotenv@^16.4.5:
+  version "16.6.1"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.6.1.tgz#773f0e69527a8315c7285d5ee73c4459d20a8020"
+  integrity sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==
 
 dunder-proto@^1.0.0, dunder-proto@^1.0.1:
   version "1.0.1"
@@ -6576,6 +6586,18 @@ react-native-animatable@1.4.0:
   integrity sha512-DZwaDVWm2NBvBxf7I0wXKXLKb/TxDnkV53sWhCvei1pRyTX3MVFpkvdYBknNBqPrxYuAIlPxEp7gJOidIauUkw==
   dependencies:
     prop-types "^15.8.1"
+
+react-native-dotenv@^3.4.11:
+  version "3.4.11"
+  resolved "https://registry.yarnpkg.com/react-native-dotenv/-/react-native-dotenv-3.4.11.tgz#2e6c4eabd55d5f1bf109b3dd9141dadf9c55cdd4"
+  integrity sha512-6vnIE+WHABSeHCaYP6l3O1BOEhWxKH6nHAdV7n/wKn/sciZ64zPPp2NUdEUf1m7g4uuzlLbjgr+6uDt89q2DOg==
+  dependencies:
+    dotenv "^16.4.5"
+
+react-native-fbsdk-next@^13.4.1:
+  version "13.4.1"
+  resolved "https://registry.yarnpkg.com/react-native-fbsdk-next/-/react-native-fbsdk-next-13.4.1.tgz#e2cb0d0c40ac00abcecceb2ee24473e74c9d8e18"
+  integrity sha512-Cto+oF0FJyvxKDjKyLKI5DgnLCeeRlXvVQb8qw0XesT1Xune1ijDWAnvt9fy6wXJ4G7K510xKkcSUsbK/KyPhg==
 
 react-native-formik@^1.7.8:
   version "1.7.8"

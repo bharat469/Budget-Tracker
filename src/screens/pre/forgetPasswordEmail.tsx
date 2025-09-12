@@ -16,9 +16,9 @@ const ForgetPasswordEmail = (props: any) => {
     initialValues: { phoneNumber: '' },
     validationSchema: PHONE_NUMBER_SCHEMA,
     onSubmit: values => {
-      props.navigation.navigate(NavigationConstant.FORGOT_PASSWORD_SCREEN, {
-        phoneNumber: values.phoneNumber,
-      });
+      // props.navigation.navigate(NavigationConstant.FORGOT_PASSWORD_SCREEN, {
+      //   phoneNumber: values.phoneNumber,
+      // });
     },
   });
 

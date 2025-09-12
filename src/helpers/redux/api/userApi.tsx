@@ -8,7 +8,7 @@ export const StoreDataOfUser = async (payload: UserData) => {
     const docRef = await firestore()
       .collection('userInformation')
       .add({ payload });
-    const auth = getAuth();
+
     return docRef;
   } catch (e) {
     if (e instanceof Error) {

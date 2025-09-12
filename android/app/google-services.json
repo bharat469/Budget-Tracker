@@ -12,7 +12,20 @@
           "package_name": "com.bugdettracker"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "526058214643-dccofch3v5afm83kf5nks150o8ookn1j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bugdettracker",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "526058214643-uo9mvtffibq7mrgghpo80o37uc3hc3f3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDsfntCMFbF1_3D3vBQMI8AlE8P8iWHMGs"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "526058214643-uo9mvtffibq7mrgghpo80o37uc3hc3f3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "526058214643-hjnv689mod7odb0jtk8aqcc53q0t92q6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bugdettracker"
+              }
+            }
+          ]
         }
       }
     }

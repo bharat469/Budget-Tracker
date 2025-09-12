@@ -1,11 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { VerifyAuthentication } from '../../../utils/typeConfig';
 
 export interface AuthState {
   isLoading: boolean;
   loginData: Record<string, any> | null;
-  registerData: Record<string, any> | null;
+  verifyOtpData: Record<string, any> | null;
   userToken: string | null;
   error: string | null;
+  verifyError: string | null;
+  googleSiginData: Record<string, any> | null;
+  googleSiginError: string | null;
+  FacebookSiginData: Record<string, any> | null;
+  FacebookSiginError: string | null;
 }
 
 const initialState: AuthState = {
@@ -13,16 +19,21 @@ const initialState: AuthState = {
   loginData: null,
   userToken: null,
   error: null,
-  registerData: null,
+  verifyError: null,
+  verifyOtpData: null,
+  googleSiginData: null,
+  googleSiginError: null,
+  FacebookSiginData: null,
+  FacebookSiginError: null,
 };
 
 const AuthSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    loginWithEmailPassword: (
+    loginWithPhoneNumber: (
       state,
-      _action: PayloadAction<{ email: string; password: string }>,
+      _action: PayloadAction<{ phoneNumber: string }>,
     ) => {
       state.isLoading = true;
       state.error = null;
@@ -38,38 +49,72 @@ const AuthSlice = createSlice({
     saveUserToken: (state, action: PayloadAction<string>) => {
       state.userToken = action.payload;
     },
-    registerWithEmailPassword: (
+    verifyOtpStart: (
       state,
-      action: PayloadAction<{ email: string; password: string }>,
+      action: PayloadAction<{ otpNumber: string; verificationId: string }>,
     ) => {
       state.isLoading = true;
       state.error = null;
     },
-    registerDataSuccess: (state, action: PayloadAction<any>) => {
+    verifyOtpDataSuccess: (state, action: PayloadAction<any>) => {
       state.isLoading = false;
-      state.registerData = action.payload;
+      state.verifyOtpData = action.payload;
     },
-    registerFailure: (state, action: PayloadAction<string>) => {
+    verifyOtpFailure: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
-      state.error = action.payload;
+      state.verifyError = action.payload;
     },
+    googleSiginStart: state => {
+      (state.isLoading = true), (state.googleSiginError = null);
+    },
+    googleSiginSuccess: (state, action: PayloadAction<any>) => {
+      (state.isLoading = false), (state.googleSiginData = action.payload);
+    },
+    googleSiginFailure: (state, action: PayloadAction<string>) => {
+      (state.isLoading = false), (state.googleSiginError = action.payload);
+    },
+    FacebookSiginStart: state => {
+      (state.isLoading = true), (state.FacebookSiginError = null);
+    },
+    FacebookSiginSuccess: (state, action: PayloadAction<any>) => {
+      (state.isLoading = false), (state.FacebookSiginData = action.payload);
+    },
+    FacebookSiginFailure: (state, action: PayloadAction<string>) => {
+      (state.isLoading = false), (state.FacebookSiginError = action.payload);
+    },
+    logoutStart: state => {
+      state.isLoading = true;
+    },
+
     resetAll: state => {
       (state.userToken = null),
         (state.loginData = null),
-        (state.registerData = null);
+        (state.verifyOtpData = null);
       state.error = null;
+      state.verifyError = null;
+      state.googleSiginData = null;
+      state.googleSiginError = null;
+      state.FacebookSiginData = null;
+      state.FacebookSiginError = null;
     },
   },
 });
 
 export const {
-  loginWithEmailPassword,
+  loginWithPhoneNumber,
   loginDataSuccess,
   loginFailure,
   saveUserToken,
-  registerWithEmailPassword,
-  registerDataSuccess,
-  registerFailure,
+  verifyOtpStart,
+  verifyOtpDataSuccess,
+  verifyOtpFailure,
+  googleSiginStart,
+  googleSiginSuccess,
+  googleSiginFailure,
+  FacebookSiginFailure,
+  FacebookSiginStart,
+  FacebookSiginSuccess,
+  logoutStart,
   resetAll,
 } = AuthSlice.actions;
 

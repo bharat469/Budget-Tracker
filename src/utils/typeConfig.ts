@@ -27,3 +27,11 @@ export type KeyboardType =
     isVerified: boolean;
     isFirstTime: boolean;
   };
+
+  export type PhoneAuthentication = {
+    phoneNumber: string;
+  };
+  export type VerifyAuthentication = {
+    otpNumber: string;
+    verificationId: string;
+  };
