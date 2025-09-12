@@ -9,7 +9,7 @@ import CustomButton from '../../components/customButton';
 import { useValidation } from '../../helpers/yupAdapter';
 import { REGISTER_SCHEMA } from '../../helpers/validationsHook';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerWithEmailPassword } from '../../helpers/redux/slice/authSlice';
+
 import { NavigationConstant } from '../../utils/navConstant';
 import { RootState } from '../../helpers/redux/store';
 import { startUserData } from '../../helpers/redux/slice/userSlice';

@@ -1,47 +1,92 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { LoginApi, RegisterApi } from '../api/authApi';
+import {
+  SendOtpApi,
+  RegisterApi,
+  VerifyOtpApi,
+  LoginByGoogleOauth,
+  FacebookLoginApi,
+  logout,
+} from '../api/authApi';
 import {
   loginDataSuccess,
   loginFailure,
-  loginWithEmailPassword,
-  registerDataSuccess,
-  registerFailure,
-  registerWithEmailPassword,
+  loginWithPhoneNumber,
+  verifyOtpDataSuccess,
+  verifyOtpFailure,
   saveUserToken,
+  verifyOtpStart,
+  googleSiginFailure,
+  googleSiginStart,
+  googleSiginSuccess,
+  FacebookSiginFailure,
+  FacebookSiginStart,
+  FacebookSiginSuccess,
+  resetAll,
+  logoutStart,
 } from '../slice/authSlice';
 import { storage } from '../../asyncStorageHelpers';
 import { STORAGE_STRING } from '../../../utils/storageConstant';
 
-function* EmailLoginSaga(
-  action: ReturnType<typeof loginWithEmailPassword>,
-): Generator<any, void, any> {
+function* PhoneLoginSaga(action: any): Generator<any, void, any> {
   try {
-    const response = yield call(LoginApi, action.payload);
-    yield put(loginDataSuccess(response));
-    storage.set(STORAGE_STRING.USER_TOKEN, response.uid);
-    yield put(saveUserToken(response.uid));
+    const response = yield call(SendOtpApi, action.payload);
+    yield put(loginDataSuccess(response.verificationId));
   } catch (error: any) {
+    console.log('ERROR', error);
     yield put(loginFailure(error.message || 'Login failed'));
   }
 }
 
-function* CreateEmailPasswordResgisterSaga(
-  action: ReturnType<typeof registerWithEmailPassword>,
-): Generator<any, void, any> {
+function* PhoneVerifyOtpSaga(action: any): Generator<any, void, any> {
   try {
-    const response = yield call(RegisterApi, action.payload);
-    yield put(registerDataSuccess(response));
+    const response = yield call(VerifyOtpApi, action.payload);
+
+    yield put(verifyOtpDataSuccess(response));
     storage.set(STORAGE_STRING.USER_TOKEN, response.uid);
     yield put(saveUserToken(response.uid));
   } catch (error: any) {
-    yield put(registerFailure(error.message || 'Registeration failed'));
+    yield put(verifyOtpFailure(error.message || 'Registeration failed'));
+  }
+}
+
+function* GoogleSignInFunctionSaga(): Generator<any, void, any> {
+  try {
+    const response = yield call(LoginByGoogleOauth);
+    yield put(googleSiginSuccess(response));
+    storage.set(STORAGE_STRING.USER_TOKEN, response.uid);
+    yield put(saveUserToken(response.uid));
+  } catch (error: any) {
+    console.log('ERROR WHILE GOOGLE AUTH', error);
+    yield put(googleSiginFailure(error.message || 'Gooogle Login Failed'));
+  }
+}
+function* FacebookSignInFunctionSaga(): Generator<any, void, any> {
+  try {
+    const response = yield call(FacebookLoginApi);
+
+    yield put(FacebookSiginSuccess(response));
+    storage.set(STORAGE_STRING.USER_TOKEN, response.uid);
+    yield put(saveUserToken(response.uid));
+  } catch (error: any) {
+    console.log('ERROR WHILE FACEBOOK AUTH', error);
+    yield put(FacebookSiginFailure(error.message || 'Facebook Login Failed'));
+  }
+}
+
+function* LogoutSaga(): Generator<any, void, any> {
+  try {
+    const response = yield call(logout);
+    storage.remove(STORAGE_STRING.USER_TOKEN);
+    yield put(resetAll());
+  } catch (error: any) {
+    console.log('THE ERROR in Logout is ', error);
   }
 }
 
 export function* authSaga() {
-  yield takeLatest(loginWithEmailPassword.type, EmailLoginSaga);
-  yield takeLatest(
-    registerWithEmailPassword.type,
-    CreateEmailPasswordResgisterSaga,
-  );
+  yield takeLatest(loginWithPhoneNumber.type, PhoneLoginSaga);
+  yield takeLatest(verifyOtpStart.type, PhoneVerifyOtpSaga);
+  yield takeLatest(googleSiginStart.type, GoogleSignInFunctionSaga);
+  yield takeLatest(FacebookSiginStart.type, FacebookSignInFunctionSaga);
+  yield takeLatest(logoutStart.type, LogoutSaga);
 }

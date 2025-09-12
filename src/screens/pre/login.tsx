@@ -8,7 +8,12 @@ import {
 import React, { useEffect, useState } from 'react';
 import AuthWrappers from '../../components/wrappers/authWrappers';
 import InputCompnent from '../../components/inputCompnent';
-import { moderateScale, verticalScale, scale } from '../../helpers/dimentions';
+import {
+  moderateScale,
+  verticalScale,
+  scale,
+  SCREEN,
+} from '../../helpers/dimentions';
 import CustomButton from '../../components/customButton';
 import { COLORS } from '../../utils/colorConstant';
 import { STRING_CONFIG } from '../../utils/stringConfig';
@@ -16,26 +21,39 @@ import DividerWithText from '../../helpers/dividerWithText';
 import SvgIcon from '../../components/svgComponent';
 import { NavigationConstant } from '../../utils/navConstant';
 import BottomSheetComponent from '../../components/bottomSheetComponent';
-import { LOGIN_SCHEMA } from '../../helpers/validationsHook';
+import { PHONE_NUMBER_SCHEMA } from '../../helpers/validationsHook';
 import { useDispatch, useSelector } from 'react-redux';
 import { useValidation } from '../../helpers/yupAdapter';
 import {
-  loginWithEmailPassword,
+  FacebookSiginStart,
+  googleSiginStart,
+  loginWithPhoneNumber,
   resetAll,
+  verifyOtpStart,
 } from '../../helpers/redux/slice/authSlice';
 import { RootState } from '../../helpers/redux/store';
+import { PhoneAuthentication } from '../../utils/typeConfig';
+import { GOOGLE_WEB_CLIENT_ID } from '@env';
+
+console.log('Google Client ID:', GOOGLE_WEB_CLIENT_ID);
 
 const Login = (props: any) => {
   const dispatch = useDispatch();
+  const [phoneNumber, setPhoneNumber] = useState('');
   const formik = useValidation({
-    initialValues: { email: '', password: '' },
-    validationSchema: LOGIN_SCHEMA,
-    onSubmit: values => {
-      dispatch(loginWithEmailPassword(values));
+    initialValues: { phoneNumber: '' },
+    validationSchema: PHONE_NUMBER_SCHEMA,
+    onSubmit: (values: PhoneAuthentication) => {
+      const payload = {
+        ...values,
+        phoneNumber: `+91${values.phoneNumber}`, // prefix before sending
+      };
+      setPhoneNumber(payload.phoneNumber);
+      dispatch(loginWithPhoneNumber(payload));
     },
   });
 
-  const { error } = useSelector((state: RootState) => state.auth);
+  const { error, loginData } = useSelector((state: RootState) => state.auth);
 
   const [isShowModal, setShowModal] = useState(false);
 
@@ -45,8 +63,24 @@ const Login = (props: any) => {
   };
 
   useEffect(() => {
+    if (loginData) {
+      props.navigation.navigate(NavigationConstant.VERIFY_OTP_SCREEN, {
+        phoneNumber: phoneNumber,
+      });
+    }
+  }, [loginData]);
+
+  useEffect(() => {
     setShowModal(!!error);
   }, [error]);
+
+  const _handleGoogleAUth = () => {
+    dispatch(googleSiginStart());
+  };
+
+  const _handleFacebookAuth = () => {
+    dispatch(FacebookSiginStart());
+  };
 
   return (
     <>
@@ -61,49 +95,33 @@ const Login = (props: any) => {
             </Text>
           </View>
           <InputCompnent
-            placeHolder={STRING_CONFIG.basicInfoString.emailAddress}
-            value={formik.values.email}
-            onChangeText={formik.handleChange('email')}
+            placeHolder={STRING_CONFIG.basicInfoString.phoneNumber}
+            value={formik.values.phoneNumber}
+            onChangeText={formik.handleChange('phoneNumber')}
             inputView={styles.inputContainerStyle}
-            errorMessage={formik.touched.email ? formik.errors.email || '' : ''}
-            keyBoardType="email-address"
+            errorMessage={
+              formik.touched.phoneNumber ? formik.errors.phoneNumber || '' : ''
+            }
+            keyBoardType="number-pad"
+            isPhoneNumber={true}
+            containerStyle={styles.otpContainer}
+            inputStyle={styles.inputText}
           />
 
-          <InputCompnent
-            placeHolder={STRING_CONFIG.basicInfoString.password}
-            value={formik.values.password}
-            onChangeText={formik.handleChange('password')}
-            secureEntry={true}
-            isShowLeftIcon={true}
-            containerStyle={styles.passwordContainer}
-            inputStyle={{ flex: 1 }}
-            errorMessage={
-              formik.touched.password ? formik.errors.password || '' : ''
-            }
-          />
           <CustomButton
             btnTitleName={STRING_CONFIG.authScreenString.siginBtnText}
             customStyle={styles.buttonStyle}
             onPress={formik.handleSubmit as any}
           />
           <View>
-            <TouchableWithoutFeedback
-              onPress={() =>
-                props.navigation.navigate(
-                  NavigationConstant.FORGOT_PASSWORD_EMAIL_SCREEN,
-                )
-              }
-            >
-              <Text style={styles.forgetText}>
-                {STRING_CONFIG.authScreenString.forgetPasswordText}
-              </Text>
-            </TouchableWithoutFeedback>
-
             <DividerWithText
               textTitle={STRING_CONFIG.authScreenString.footerText}
             />
             <View style={styles.footerContainer}>
-              <TouchableOpacity style={styles.socialContainer}>
+              <TouchableOpacity
+                style={styles.socialContainer}
+                onPress={_handleGoogleAUth}
+              >
                 <SvgIcon
                   name="goggleSvgIcon"
                   width={scale(30)}
@@ -114,7 +132,10 @@ const Login = (props: any) => {
                 </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.socialContainer}>
+              <TouchableOpacity
+                style={styles.socialContainer}
+                onPress={_handleFacebookAuth}
+              >
                 <SvgIcon
                   name="facebookSvgIcon"
                   width={scale(30)}
@@ -125,22 +146,6 @@ const Login = (props: any) => {
                 </Text>
               </TouchableOpacity>
             </View>
-            <Text
-              style={[styles.forgetText, { marginVertical: verticalScale(12) }]}
-            >
-              {STRING_CONFIG.authScreenString.signUpText}
-              <TouchableWithoutFeedback
-                onPress={() =>
-                  props.navigation.navigate(
-                    NavigationConstant.PROFILE_PICTURE_SCREEN,
-                  )
-                }
-              >
-                <Text style={styles.siginUpView}>
-                  {STRING_CONFIG.authScreenString.siginUpButton}
-                </Text>
-              </TouchableWithoutFeedback>
-            </Text>
           </View>
         </View>
       </AuthWrappers>
@@ -278,5 +283,14 @@ const styles = StyleSheet.create({
   },
   siginUpView: {
     color: COLORS.primaryColor,
+  },
+  otpContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  inputText: {
+    flex: 1,
+    borderLeftWidth: 1,
+    borderLeftColor: COLORS.primaryColor,
   },
 });

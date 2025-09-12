@@ -29,6 +29,7 @@ interface InputProps {
   errorMessage?: string;
   inputView?: any;
   keyBoardType?: KeyboardType;
+  isPhoneNumber?: boolean;
 }
 
 const InputCompnent: React.FC<InputProps> = ({
@@ -43,6 +44,7 @@ const InputCompnent: React.FC<InputProps> = ({
   errorMessage = '',
   inputView,
   keyBoardType = 'default',
+  isPhoneNumber = false,
 }) => {
   const [show, setShow] = useState(false);
   const inputRef = useRef<TextInput>(null);
@@ -54,6 +56,7 @@ const InputCompnent: React.FC<InputProps> = ({
   return (
     <View style={inputView}>
       <View style={[styles.containerDefaultStyle, containerStyle]}>
+        {isPhoneNumber && <Text style={styles.inititalText}>+91</Text>}
         <TextInput
           ref={inputRef}
           placeholder={placeHolder}
@@ -107,5 +110,10 @@ const styles = StyleSheet.create({
     color: COLORS.red,
     fontWeight: '500',
     textTransform: 'capitalize',
+  },
+  inititalText: {
+    fontSize: moderateScale(18),
+    marginHorizontal: scale(4),
+    fontWeight: '700',
   },
 });
