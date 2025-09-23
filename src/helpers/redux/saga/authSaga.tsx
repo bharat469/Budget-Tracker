@@ -43,6 +43,8 @@ function* PhoneVerifyOtpSaga(action: any): Generator<any, void, any> {
 
     yield put(verifyOtpDataSuccess(response));
     storage.set(STORAGE_STRING.USER_TOKEN, response.uid);
+    storage.set(STORAGE_STRING.PHONE_NUMBER, action.payload.phoneNumber);
+    yield put(resetAll());
     yield put(saveUserToken(response.uid));
   } catch (error: any) {
     yield put(verifyOtpFailure(error.message || 'Registeration failed'));
@@ -54,6 +56,7 @@ function* GoogleSignInFunctionSaga(): Generator<any, void, any> {
     const response = yield call(LoginByGoogleOauth);
     yield put(googleSiginSuccess(response));
     storage.set(STORAGE_STRING.USER_TOKEN, response.uid);
+    storage.set(STORAGE_STRING.EMAIL, response.email);
     yield put(saveUserToken(response.uid));
   } catch (error: any) {
     console.log('ERROR WHILE GOOGLE AUTH', error);
@@ -63,9 +66,9 @@ function* GoogleSignInFunctionSaga(): Generator<any, void, any> {
 function* FacebookSignInFunctionSaga(): Generator<any, void, any> {
   try {
     const response = yield call(FacebookLoginApi);
-
     yield put(FacebookSiginSuccess(response));
     storage.set(STORAGE_STRING.USER_TOKEN, response.uid);
+    storage.set(STORAGE_STRING.EMAIL, response.email);
     yield put(saveUserToken(response.uid));
   } catch (error: any) {
     console.log('ERROR WHILE FACEBOOK AUTH', error);
@@ -77,6 +80,8 @@ function* LogoutSaga(): Generator<any, void, any> {
   try {
     const response = yield call(logout);
     storage.remove(STORAGE_STRING.USER_TOKEN);
+    storage.remove(STORAGE_STRING.PHONE_NUMBER);
+    storage.remove(STORAGE_STRING.EMAIL);
     yield put(resetAll());
   } catch (error: any) {
     console.log('THE ERROR in Logout is ', error);

@@ -25,14 +25,7 @@ const PreNavigation = () => {
         name={NavigationConstant.LOGIN_SCREEN}
         component={Login}
       />
-      <PostStack.Screen
-        name={NavigationConstant.REGISTER_SCREEN}
-        component={RegisterScreen}
-      />
-      <PostStack.Screen
-        name={NavigationConstant.PROFILE_PICTURE_SCREEN}
-        component={ProfilePictureScreen}
-      />
+
       <PostStack.Screen
         name={NavigationConstant.VERIFY_OTP_SCREEN}
         component={VerifyOtpScreen}

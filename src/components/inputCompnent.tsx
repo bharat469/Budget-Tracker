@@ -30,6 +30,8 @@ interface InputProps {
   inputView?: any;
   keyBoardType?: KeyboardType;
   isPhoneNumber?: boolean;
+  countryCode?: string;
+  isCurrencyUsed?: boolean;
 }
 
 const InputCompnent: React.FC<InputProps> = ({
@@ -45,6 +47,8 @@ const InputCompnent: React.FC<InputProps> = ({
   inputView,
   keyBoardType = 'default',
   isPhoneNumber = false,
+  countryCode = 'INR',
+  isCurrencyUsed = false,
 }) => {
   const [show, setShow] = useState(false);
   const inputRef = useRef<TextInput>(null);
@@ -53,6 +57,32 @@ const InputCompnent: React.FC<InputProps> = ({
     setShow(!show);
     inputRef.current?.focus();
   };
+
+  const formatCurrency = (text: string) => {
+    const cleanValue = text.replace(/,/g, '');
+    if (isNaN(Number(cleanValue))) return text;
+    if (countryCode === 'INR') {
+      const lastThree = cleanValue.slice(-3);
+      const otherNumbers = cleanValue.slice(0, -3);
+      return (
+        otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') +
+        (otherNumbers ? ',' : '') +
+        lastThree
+      );
+    } else {
+      return Number(cleanValue).toLocaleString('en-US');
+    }
+  };
+
+  const handleChangeText = (text: string) => {
+    if (isCurrencyUsed) {
+      const formatted = formatCurrency(text);
+      onChangeText(formatted);
+    } else {
+      onChangeText(text);
+    }
+  };
+
   return (
     <View style={inputView}>
       <View style={[styles.containerDefaultStyle, containerStyle]}>
@@ -61,7 +91,7 @@ const InputCompnent: React.FC<InputProps> = ({
           ref={inputRef}
           placeholder={placeHolder}
           value={value}
-          onChangeText={onChangeText}
+          onChangeText={handleChangeText}
           style={[styles.inputDefaultStyle, inputStyle]}
           secureTextEntry={secureEntry && !show}
           placeholderTextColor={placeHolderColor}
@@ -115,5 +145,6 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(18),
     marginHorizontal: scale(4),
     fontWeight: '700',
+    color: COLORS.black,
   },
 });

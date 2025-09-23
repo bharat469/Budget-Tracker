@@ -1,12 +1,4 @@
-import {
-  ActivityIndicator,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback, // 🔥 FIX (replaced TouchableWithoutFeedback)
-  View,
-} from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { COLORS } from '../../utils/colorConstant';
 import SvgIcon from '../../components/svgComponent';
@@ -17,11 +9,11 @@ import { NavigationConstant } from '../../utils/navConstant';
 import ImagePicker from 'react-native-image-crop-picker';
 import BottomSheetComponent from '../../components/bottomSheetComponent';
 import PickerBodySheet from '../../components/bottomSheetBody/pickerBodySheet';
-import SuccessBodySheet from '../../components/bottomSheetBody/successBodySheet';
-import ImageSuccess from '../../components/bottomSheetBody/imageSuccess';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { startImageUpload } from '../../helpers/redux/slice/userSlice';
 import { RootState } from '../../helpers/redux/store';
+import ActivityIndicator from '../../helpers/activityIndicator';
 
 const ProfilePictureScreen = (props: any) => {
   const [showModal, setShowModal] = useState({
@@ -33,6 +25,17 @@ const ProfilePictureScreen = (props: any) => {
   const { imageUploadLoading } = useSelector(
     (state: RootState) => state.userData,
   );
+  const { googleSiginData, FacebookSiginData } = useSelector(
+    (state: RootState) => state.auth,
+  );
+
+  useEffect(() => {
+    if (profilePic.length == 0 && googleSiginData?.photo) {
+      setProfilePic(googleSiginData.photo);
+    } else if (profilePic.length == 0 && FacebookSiginData?.photo) {
+      setProfilePic(FacebookSiginData.photo);
+    }
+  }, [googleSiginData, profilePic]);
 
   const _handleCancelModal = () => {
     setShowModal(prev => ({ ...prev, imagePicker: false }));
@@ -76,18 +79,7 @@ const ProfilePictureScreen = (props: any) => {
     props.navigation.navigate(NavigationConstant.REGISTER_SCREEN);
   };
   if (imageUploadLoading) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: 'transparent',
-        }}
-      >
-        <ActivityIndicator size="large" />
-      </View>
-    );
+    return <ActivityIndicator />;
   }
   return (
     <View style={styles.onBoardingStyle}>
@@ -122,21 +114,6 @@ const ProfilePictureScreen = (props: any) => {
             onPress={_handleNavigation}
           />
         )}
-
-        <Text
-          style={[styles.forgetText, { marginVertical: verticalScale(12) }]}
-        >
-          {STRING_CONFIG.authScreenString.loginNavText}
-          <TouchableWithoutFeedback
-            onPress={() =>
-              props.navigation.navigate(NavigationConstant.LOGIN_SCREEN)
-            }
-          >
-            <Text style={styles.siginUpView}>
-              {STRING_CONFIG.authScreenString.siginBtnText}
-            </Text>
-          </TouchableWithoutFeedback>
-        </Text>
       </View>
       <BottomSheetComponent
         isVisible={showModal.imagePicker}

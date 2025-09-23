@@ -8,12 +8,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import AuthWrappers from '../../components/wrappers/authWrappers';
 import InputCompnent from '../../components/inputCompnent';
-import {
-  moderateScale,
-  verticalScale,
-  scale,
-  SCREEN,
-} from '../../helpers/dimentions';
+import { moderateScale, scale, verticalScale } from '../../helpers/dimentions';
 import CustomButton from '../../components/customButton';
 import { COLORS } from '../../utils/colorConstant';
 import { STRING_CONFIG } from '../../utils/stringConfig';
@@ -29,13 +24,10 @@ import {
   googleSiginStart,
   loginWithPhoneNumber,
   resetAll,
-  verifyOtpStart,
 } from '../../helpers/redux/slice/authSlice';
 import { RootState } from '../../helpers/redux/store';
 import { PhoneAuthentication } from '../../utils/typeConfig';
-import { GOOGLE_WEB_CLIENT_ID } from '@env';
-
-console.log('Google Client ID:', GOOGLE_WEB_CLIENT_ID);
+import ActivityIndicator from '../../helpers/activityIndicator';
 
 const Login = (props: any) => {
   const dispatch = useDispatch();
@@ -53,7 +45,10 @@ const Login = (props: any) => {
     },
   });
 
-  const { error, loginData } = useSelector((state: RootState) => state.auth);
+  const { error, loginData, isLoading, FacebookSiginError, googleSiginError } =
+    useSelector((state: RootState) => state.auth);
+
+  console.log('shdgksd', FacebookSiginError);
 
   const [isShowModal, setShowModal] = useState(false);
 
@@ -71,8 +66,22 @@ const Login = (props: any) => {
   }, [loginData]);
 
   useEffect(() => {
-    setShowModal(!!error);
-  }, [error]);
+    if (error || FacebookSiginError || googleSiginError) {
+      setShowModal(true);
+    } else {
+      setShowModal(false);
+    }
+  }, [error, FacebookSiginError, googleSiginError]);
+
+  const _showMessageError = () => {
+    if (error) {
+      return STRING_CONFIG.modalText.errorNetworkModal.headerTwo;
+    } else if (FacebookSiginError) {
+      return FacebookSiginError;
+    } else if (googleSiginError) {
+      return googleSiginError.slice(5);
+    }
+  };
 
   const _handleGoogleAUth = () => {
     dispatch(googleSiginStart());
@@ -81,6 +90,10 @@ const Login = (props: any) => {
   const _handleFacebookAuth = () => {
     dispatch(FacebookSiginStart());
   };
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <>
@@ -167,9 +180,7 @@ const Login = (props: any) => {
               <Text style={styles.messageText}>
                 {STRING_CONFIG.modalText.errorNetworkModal.headerOne}
               </Text>
-              <Text style={styles.messageSubText}>
-                {STRING_CONFIG.modalText.errorNetworkModal.headerTwo}
-              </Text>
+              <Text style={styles.messageSubText}>{_showMessageError()}</Text>
             </View>
           </View>
           <CustomButton

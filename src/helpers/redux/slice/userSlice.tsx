@@ -5,6 +5,7 @@ interface UserState {
   isLoading: boolean;
   isStoredUserData: Boolean;
   userData: Record<string, any> | null;
+  userDataSuccess: boolean;
   error: string | null;
   imageUrl: string;
   imageUploadLoading: boolean;
@@ -14,11 +15,12 @@ interface UserState {
 const inititalState: UserState = {
   isStoredUserData: false,
   userData: null,
-  isLoading: false,
+  isLoading: true,
   error: null,
   imageUrl: '',
   imageUploadLoading: false,
   imageError: null,
+  userDataSuccess: false,
 };
 
 const UserSlice = createSlice({
@@ -33,8 +35,8 @@ const UserSlice = createSlice({
       state.isStoredUserData = action.payload;
       state.isLoading = false;
     },
-    storedDataFetch: (state, action) => {
-      state.userData = action.payload;
+    storedDataFetch: state => {
+      state.userDataSuccess = true;
       state.isLoading = false;
     },
     startImageUpload: (state, _action: PayloadAction<string>) => {
@@ -48,6 +50,16 @@ const UserSlice = createSlice({
     getImageUrlError: (state, action) => {
       (state.imageError = action.payload), (state.imageUploadLoading = false);
     },
+    startGetUserData: state => {
+      (state.isLoading = true), (state.error = null);
+    },
+
+    getUserData: (state, action) => {
+      (state.userData = action.payload), (state.isLoading = false);
+    },
+    userError: (state, action) => {
+      state.error = action.payload;
+    },
   },
 });
 
@@ -58,6 +70,9 @@ export const {
   startImageUpload,
   getImageUrl,
   getImageUrlError,
+  startGetUserData,
+  getUserData,
+  userError,
 } = UserSlice.actions;
 
 export default UserSlice.reducer;
