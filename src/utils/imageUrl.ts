@@ -20,6 +20,12 @@ export const SVG_URL = {
   cameraIcon: require('../assets/svg/camera.svg').default,
   galleryIcon: require('../assets/svg/galleryIcon.svg').default,
   imagUploadIcon: require('../assets/svg/imagupload.svg').default,
+  dropdownOpen: require('../assets/svg/chevronDown.svg').default,
+  dropdownClose: require('../assets/svg/chevronUp.svg').default,
+};
+
+export const LOTTIE_URL = {
+  loaderScreen: require('../assets/lottie/loader.json'),
 };
 
 export type IconName = keyof typeof SVG_URL;

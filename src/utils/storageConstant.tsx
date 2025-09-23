@@ -1,3 +1,5 @@
 export const STORAGE_STRING = {
   USER_TOKEN: 'USER_TOKEN',
+  PHONE_NUMBER: 'PHONE_NUMBER',
+  EMAIL: 'EMAIL',
 };

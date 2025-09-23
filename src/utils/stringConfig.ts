@@ -2,11 +2,13 @@ export const STRING_CONFIG = {
   onboarding: {
     headingOne: 'Spend Smarter',
     HeadingTwo: 'Save More',
+    subHeading: 'Track your expenses and save effortlessly',
   },
   genricString: {
     login: 'Login',
     loginNavText: ' Already Have Account?',
     getStartedText: 'Get Started',
+    verifyOtpHeader: 'Verify OTP',
   },
   authScreenString: {
     headingOne: 'Track it. Save it. Enjoy it.',
@@ -26,9 +28,12 @@ export const STRING_CONFIG = {
     openCameraBtnText: 'Say Cheese 📸',
     headerOne: 'Snap to Complete \n Your  Profile',
     subheadigTwo: 'Make sure your face is clearly visible and well-lit',
-    RegisterHeading: 'Sign up now and set up your monthly plan in minutes.',
+    RegisterHeading: 'Tell us a little about your finances',
     RegisterSubHeading: 'Start Your Budget Journey',
     RegisterBtnText: 'Start My Journey',
+    PickerPlaceHolder: 'Select your Employement status',
+    SelectCurrency: 'Select currency',
+    SearchCurrency: 'Search currency code or name',
   },
   basicInfoString: {
     fullName: 'Enter your full name',
@@ -36,6 +41,8 @@ export const STRING_CONFIG = {
     phoneNumber: 'Enter your phone number',
     password: 'Create a password',
     confirmPassword: 'Re-enter your password',
+    Pincode: 'Please enter your pincode',
+    monthlyIncome: 'Enter your monthly allowance / salary',
   },
   forgetPasswordString: {
     header: 'Forgot Password',
@@ -78,4 +85,9 @@ export const STRING_CONFIG = {
     ButtonText: 'More Detail ✨✨',
     tryAgain: 'Try Again 💔 💔',
   },
+  employeeStatusArray: [
+    { label: 'Employed', value: 'employed' },
+    { label: 'Unemployed', value: 'unemployed' },
+    { label: 'Student', value: 'student' },
+  ],
 };

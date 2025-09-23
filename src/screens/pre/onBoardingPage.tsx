@@ -21,7 +21,7 @@ import { STRING_CONFIG } from '../../utils/stringConfig';
 
 const OnBoardingPage = (props: any) => {
   const _handleGetStarted = () => {
-    props.navigation.navigate(NavigationConstant.PROFILE_PICTURE_SCREEN);
+    props.navigation.navigate(NavigationConstant.LOGIN_SCREEN);
   };
 
   return (
@@ -43,24 +43,14 @@ const OnBoardingPage = (props: any) => {
             {STRING_CONFIG.onboarding.HeadingTwo}
           </Text>
         </View>
+        <Text style={styles.subHeadingText}>
+          {STRING_CONFIG.onboarding.subHeading}
+        </Text>
         <CustomButton
           btnTitleName={STRING_CONFIG.genricString.getStartedText}
           onPress={_handleGetStarted}
           customStyle={{ marginVertical: verticalScale(12) }}
         />
-        <Text style={styles.footerText}>
-          {STRING_CONFIG.genricString.loginNavText}
-          <TouchableWithoutFeedback
-            onPress={() =>
-              props.navigation.navigate(NavigationConstant.LOGIN_SCREEN)
-            }
-          >
-            <Text style={styles.footerLinkText}>
-              {' '}
-              {STRING_CONFIG.genricString.login}
-            </Text>
-          </TouchableWithoutFeedback>
-        </Text>
       </View>
     </View>
   );
@@ -94,16 +84,18 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: COLORS.primaryColor,
   },
-  footerText: {
-    fontSize: moderateScale(18),
-    textAlign: 'center',
-    marginVertical: verticalScale(12),
-    color: COLORS.shadesOfGrey.greyPrimary,
-    fontWeight: '600',
-  },
+
   footerLinkText: {
     fontSize: moderateScale(18),
     color: COLORS.primaryColor,
+    fontWeight: '600',
+  },
+  subHeadingText: {
+    textAlign: 'center',
+    marginVertical: verticalScale(22),
+    color: COLORS.shadesOfGrey.greyPrimary,
+    fontSize: moderateScale(24),
+    marginHorizontal: scale(12),
     fontWeight: '600',
   },
 });

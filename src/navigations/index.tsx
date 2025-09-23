@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+
 
 import PreNavigation from './pre';
 import PostNavigation from './post';
@@ -8,6 +8,7 @@ import { RootState } from '../helpers/redux/store';
 import { saveUserToken } from '../helpers/redux/slice/authSlice';
 import { storage } from '../helpers/asyncStorageHelpers';
 import { STORAGE_STRING } from '../utils/storageConstant';
+import ActivityIndicator from '../helpers/activityIndicator';
 
 const Navigations = () => {
   const dispatch = useDispatch();
@@ -34,11 +35,7 @@ const Navigations = () => {
   }, [dispatch]);
 
   if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
+    return <ActivityIndicator />;
   }
 
   return userToken ? <PostNavigation /> : <PreNavigation />;

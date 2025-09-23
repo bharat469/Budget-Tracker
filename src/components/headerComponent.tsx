@@ -4,6 +4,8 @@ import SvgIcon, { IconNameType } from './svgComponent';
 import { moderateScale, scale, verticalScale } from '../helpers/dimentions';
 import { COLORS } from '../utils/colorConstant';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { resetAll } from '../helpers/redux/slice/authSlice';
 
 interface HeaderComponentProps {
   headerTiltle: string;
@@ -23,12 +25,13 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({
   onRightPress,
 }) => {
   const navigation = useNavigation();
-
+  const dispatch = useDispatch();
   const handleBackPress = () => {
     if (onBackPress) {
       onBackPress();
     } else {
       navigation.goBack();
+      dispatch(resetAll());
     }
   };
 

@@ -5,6 +5,7 @@ import React, {
   useImperativeHandle,
 } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
+import { COLORS } from '../utils/colorConstant';
 
 interface OTPInputProps {
   length?: number;
@@ -90,6 +91,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: 10,
     fontSize: 18,
+    color: COLORS.black,
   },
 });
 

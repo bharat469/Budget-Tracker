@@ -3,14 +3,15 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInWithPhoneNumber,
-  verifyPhoneNumber,
   PhoneAuthProvider,
   linkWithCredential,
   signInWithCredential,
   GoogleAuthProvider,
   FacebookAuthProvider,
   signOut,
+  fetchSignInMethodsForEmail,
 } from '@react-native-firebase/auth';
+import { initializeApp } from '@react-native-firebase/app';
 import {
   Authtentication,
   PhoneAuthentication,
@@ -18,13 +19,20 @@ import {
 } from '../../../utils/typeConfig';
 import { useEffect } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { GOOGLE_IOS_CLIENT_ID, GOOGLE_WEB_CLIENT_ID } from '@env';
-import { authSaga } from '../saga/authSaga';
+import { GOOGLE_WEB_CLIENT_ID } from '@env';
+
 import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
 
 GoogleSignin.configure({
   webClientId: GOOGLE_WEB_CLIENT_ID,
 });
+
+const getFacebookProfile = async (accessToken: string) => {
+  const response = await fetch(
+    `https://graph.facebook.com/me?fields=id,name,email,picture.type(large)&access_token=${accessToken}`,
+  );
+  return response.json();
+};
 
 export const LoginApi = async (payload: Authtentication) => {
   try {
@@ -75,18 +83,15 @@ export const VerifyOtpApi = async (payload: VerifyAuthentication) => {
       payload.verificationId,
       payload.otpNumber,
     );
-    console.log(authInstance.currentUser, 'sghdjhs');
+
     let userData;
     if (!authInstance.currentUser) {
-      // normal login
       userData = await signInWithCredential(authInstance, credential);
     } else if (
       authInstance.currentUser.providerData.some(p => p.providerId === 'phone')
     ) {
-      // already linked
       userData = { user: authInstance.currentUser };
     } else {
-      // link phone to existing account
       userData = await linkWithCredential(authInstance.currentUser, credential);
     }
 
@@ -152,45 +157,55 @@ export const LoginByGoogleOauth = async () => {
 };
 
 export const FacebookLoginApi = async () => {
+  let Token: any = null;
+
   try {
     const loginResult = await LoginManager.logInWithPermissions([
       'public_profile',
       'email',
     ]);
 
-    if (!loginResult) {
-      throw new Error('NETWORK ERROR KINDLY TRY AGAIN');
-    }
-    const Token = await AccessToken.getCurrentAccessToken();
-    if (!Token) {
-      throw new Error('Failed to Retrive ID Token from facebook Sigin-in');
-    }
+    if (!loginResult) throw new Error('NETWORK ERROR KINDLY TRY AGAIN');
 
-    const facebookCrediential = await FacebookAuthProvider.credential(
-      Token.accessToken,
-    );
+    Token = await AccessToken.getCurrentAccessToken();
+    if (!Token) throw new Error('Failed to Retrieve ID Token from Facebook');
 
-    const userCrediential = await signInWithCredential(
-      getAuth(),
-      facebookCrediential,
-    );
+    const facebookCred = FacebookAuthProvider.credential(Token.accessToken);
+    const userCredential = await signInWithCredential(getAuth(), facebookCred);
 
-    const { displayName, email, photoURL, uid } = userCrediential.user;
+    const { displayName, email, photoURL, uid } = userCredential.user;
 
-    return {
-      name: displayName,
-      email: email,
-      photo: photoURL,
-      uid: uid,
-    };
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
+    return { name: displayName, email, photo: photoURL, uid };
+  } catch (error: any) {
+    if (error.code === 'auth/account-exists-with-different-credential') {
+      const pendingCred = FacebookAuthProvider.credential(Token?.accessToken);
+
+      const emailFromError = error.customData?.email || error.email || null;
+
+      let emailToCheck = emailFromError;
+      if (!emailToCheck && Token) {
+        const profile = await getFacebookProfile(Token.accessToken);
+        emailToCheck = profile?.email ?? null;
+      }
+
+      let methods: string[] = [];
+      if (emailToCheck) {
+        methods = await fetchSignInMethodsForEmail(getAuth(), emailToCheck);
+      }
+
+      throw new Error(
+        `This account already exists with the same email using ${
+          methods[0] ?? 'another provider'
+        }. Please sign in with that and then link Facebook.`,
+      );
     } else {
-      throw new Error(String(error));
+      throw error instanceof Error ? error : new Error(String(error));
     }
   }
 };
+
+
+
 export const logout = async () => {
   try {
     const authInstance = getAuth();

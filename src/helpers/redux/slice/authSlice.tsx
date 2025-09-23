@@ -87,15 +87,14 @@ const AuthSlice = createSlice({
     },
 
     resetAll: state => {
-      (state.userToken = null),
-        (state.loginData = null),
-        (state.verifyOtpData = null);
+      (state.userToken = null), (state.verifyOtpData = null);
       state.error = null;
       state.verifyError = null;
       state.googleSiginData = null;
       state.googleSiginError = null;
       state.FacebookSiginData = null;
       state.FacebookSiginError = null;
+      state.isLoading = false;
     },
   },
 });

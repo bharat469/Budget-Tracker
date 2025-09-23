@@ -34,3 +34,24 @@ export const uploadImageApi = async (payload: string) => {
     }
   }
 };
+
+export const GetDataUser = async () => {
+  try {
+    const snapshot = await firestore()
+      .collection('userInformation') // 👈 your collection name
+      .get();
+
+    const users = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    return users;
+  } catch (e) {
+    if (e instanceof Error) {
+      throw new Error(e.message);
+    } else {
+      throw new Error(String(e));
+    }
+  }
+};

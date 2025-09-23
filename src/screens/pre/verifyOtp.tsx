@@ -12,26 +12,28 @@ import { STRING_CONFIG } from '../../utils/stringConfig';
 import { COLORS } from '../../utils/colorConstant';
 import OTPInput, { OTPInputRef } from '../../components/otpInputComponet';
 import CustomButton from '../../components/customButton';
-import { NavigationConstant } from '../../utils/navConstant';
+
 import BottomSheetComponent from '../../components/bottomSheetComponent';
 import SvgIcon from '../../components/svgComponent';
 
 import { useValidation } from '../../helpers/yupAdapter';
 import { VALID_OTP } from '../../helpers/validationsHook';
 import { useDispatch, useSelector } from 'react-redux';
-import { VerifyOtpApi } from '../../helpers/redux/api/authApi';
+import { SendOtpApi, VerifyOtpApi } from '../../helpers/redux/api/authApi';
+import { VerifyAuthentication } from '../../utils/typeConfig';
 import {
-  PhoneAuthentication,
-  VerifyAuthentication,
-} from '../../utils/typeConfig';
-import { resetAll, verifyOtpStart } from '../../helpers/redux/slice/authSlice';
+  loginWithPhoneNumber,
+  resetAll,
+  verifyOtpStart,
+} from '../../helpers/redux/slice/authSlice';
 import { RootState } from '../../helpers/redux/store';
+import ActivityIndicator from '../../helpers/activityIndicator';
 
 const VerifyOtpScreen = (props: any) => {
   let { phoneNumber } = props.route.params;
   const otpRef = useRef<OTPInputRef>(null);
   const dispatch = useDispatch();
-  const { verifyError, loginData } = useSelector(
+  const { verifyError, loginData, isLoading } = useSelector(
     (state: RootState) => state.auth,
   );
 
@@ -45,33 +47,48 @@ const VerifyOtpScreen = (props: any) => {
     onSubmit: (values: VerifyAuthentication) => {
       const payload = {
         otpNumber: values.otpNumber,
-        verificationId: `${loginData}`, // prefix before sending
+        verificationId: `${loginData}`,
+        phoneNumber: phoneNumber,
       };
       dispatch(verifyOtpStart(payload));
     },
   });
+
   useEffect(() => {
     setShowModal(!!verifyError);
   }, [verifyError]);
 
-  // useEffect(() => {
-  //   if (otpTimer === 0) return;
+  useEffect(() => {
+    if (!otpTimer) return;
 
-  //   const interval = setInterval(() => {
-  //     setTimer(prev => (prev > 0 ? prev - 1 : 0));
-  //   }, 1000);
+    setTimer(otpTimer); // reset timer when new otpTimer comes
 
-  //   return () => clearInterval(interval);
-  // }, [otpTimer]);
+    const interval = setInterval(() => {
+      setTimer(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [otpTimer]); // ✅ only resets when otpTimer resets
 
   function handleResend(): void {
     otpRef.current?.clear(); // clear OTP and auto focus first input
     setTimer(60); // restart timer
+    const payload = { phoneNumber: phoneNumber };
+    dispatch(loginWithPhoneNumber(payload));
   }
   const _handleOnCancelModal = () => {
     setShowModal(!showModal);
     dispatch(resetAll());
   };
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <>
@@ -81,6 +98,7 @@ const VerifyOtpScreen = (props: any) => {
         isShowHeading={false}
         svgContainerStyle={styles.authWrapperCustomStyle}
         showHeader
+        headerTitle={STRING_CONFIG.genricString.verifyOtpHeader}
       >
         <View style={styles.otpContainer}>
           <Text style={styles.headerText} numberOfLines={1}>
