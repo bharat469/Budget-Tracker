@@ -8,4 +8,5 @@ export const COLORS = {
   },
   lightGreen: '#EEF8F7',
   red: '#c1121f',
+  cardGreenColor: '#2F7E79',
 };

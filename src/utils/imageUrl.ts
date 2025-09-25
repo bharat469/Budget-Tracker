@@ -1,5 +1,6 @@
 export const IMAGE_URL = {
   onboardScreen: require('../assets/png/man.png'),
+  avatarImage: require('../assets/png/user.png'),
 };
 
 export const SVG_URL = {
@@ -22,6 +23,8 @@ export const SVG_URL = {
   imagUploadIcon: require('../assets/svg/imagupload.svg').default,
   dropdownOpen: require('../assets/svg/chevronDown.svg').default,
   dropdownClose: require('../assets/svg/chevronUp.svg').default,
+  arrowUp: require('../assets/svg/arrowup.svg').default,
+  arrowDown: require('../assets/svg/arrowDown.svg').default,
 };
 
 export const LOTTIE_URL = {

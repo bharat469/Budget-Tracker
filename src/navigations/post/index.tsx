@@ -13,12 +13,13 @@ const PreStack = createNativeStackNavigator();
 
 const PostNavigation = () => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(startGetUserData());
-  }, []);
-  const { userData = [], isLoading } = useSelector(
+  const { userData, isLoading, userDataSuccess } = useSelector(
     (state: RootState) => state.userData,
   );
+
+  useEffect(() => {
+    dispatch(startGetUserData());
+  }, [userDataSuccess]);
 
   if (isLoading) {
     return <ActivityIndicator />;
@@ -40,10 +41,6 @@ const PostNavigation = () => {
           <PreStack.Screen
             name={NavigationConstant.REGISTER_SCREEN}
             component={RegisterScreen}
-          />
-          <PreStack.Screen
-            name={NavigationConstant.HOME_SCREEN}
-            component={Home}
           />
         </>
       )}

@@ -1,6 +1,5 @@
 import {
   FlatList,
-  Platform,
   StyleSheet,
   Text,
   TextInput,

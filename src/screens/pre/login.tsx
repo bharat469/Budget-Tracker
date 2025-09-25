@@ -48,7 +48,7 @@ const Login = (props: any) => {
   const { error, loginData, isLoading, FacebookSiginError, googleSiginError } =
     useSelector((state: RootState) => state.auth);
 
-  console.log('shdgksd', FacebookSiginError);
+
 
   const [isShowModal, setShowModal] = useState(false);
 

@@ -50,7 +50,10 @@ function* getUserDataSaga(): Generator<any, void, any> {
       });
 
       yield put(getUserData(data));
+    } else {
+      yield put(getUserData([]));
     }
+
   } catch (e) {
     yield put(userError(e));
   }

@@ -129,7 +129,6 @@ export const LoginByGoogleOauth = async () => {
   try {
     GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
     const data = await GoogleSignin.signIn();
-    console.log('_____data is ', data);
     const idToken = data.data?.idToken;
     if (!idToken) {
       throw new Error('failed to retrieve ID token from Google Sign-In');
@@ -175,7 +174,21 @@ export const FacebookLoginApi = async () => {
 
     const { displayName, email, photoURL, uid } = userCredential.user;
 
-    return { name: displayName, email, photo: photoURL, uid };
+    // fallback to Graph API if Firebase didn’t give picture
+    let finalPhoto: string | null = null;
+
+    // Always try Graph API for the correct picture
+    try {
+      const response = await fetch(
+        `https://graph.facebook.com/me?fields=id,name,email,picture.width(1000).height(1000)&access_token=${Token.accessToken}`,
+      );
+      const profile = await response.json();
+      finalPhoto = profile?.picture?.data?.url ?? photoURL;
+    } catch {
+      finalPhoto = photoURL; // fallback if Graph API fails
+    }
+
+    return { name: displayName, email, photo: finalPhoto, uid };
   } catch (error: any) {
     if (error.code === 'auth/account-exists-with-different-credential') {
       const pendingCred = FacebookAuthProvider.credential(Token?.accessToken);
