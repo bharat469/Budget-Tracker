@@ -37,7 +37,7 @@ const UserSlice = createSlice({
     },
     storedDataFetch: state => {
       state.userDataSuccess = true;
-      state.isLoading = false;
+      //  state.isLoading = false;
     },
     startImageUpload: (state, _action: PayloadAction<string>) => {
       state.imageUploadLoading = true;
@@ -59,6 +59,7 @@ const UserSlice = createSlice({
     },
     userError: (state, action) => {
       state.error = action.payload;
+      state.isLoading = false;
     },
   },
 });

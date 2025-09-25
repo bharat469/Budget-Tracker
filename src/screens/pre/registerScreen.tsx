@@ -61,32 +61,27 @@ const RegisterScreen = (props: any) => {
 
     let clean = number.trim();
 
-    // Remove quotes if they exist
+   
     clean = clean.replace(/"/g, '');
 
-    // Remove non-digit characters except leading +
     if (clean.startsWith('+')) {
       clean = '+' + clean.slice(1).replace(/\D/g, '');
     } else {
       clean = clean.replace(/\D/g, '');
     }
 
-    // Already starts with +91 → keep
     if (clean.startsWith('+91') && clean.length === 13) {
       return clean;
     }
 
-    // If 10 digits → add +91
     if (clean.length === 10) {
       return `+91${clean}`;
     }
 
-    // If starts with 91 and 12 digits → add +
     if (clean.length === 12 && clean.startsWith('91')) {
       return `+${clean}`;
     }
-    console.log(clean, 'shdkjs1111');
-    // fallback
+ 
     return clean;
   };
 
@@ -111,7 +106,6 @@ const RegisterScreen = (props: any) => {
         profilePic: _handleProfilePic(),
       };
       dispatch(startUserData(data));
-      props.navigation.navigate(NavigationConstant.HOME_SCREEN);
     },
   });
 

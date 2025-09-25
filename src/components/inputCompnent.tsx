@@ -16,6 +16,7 @@ import { COLORS } from '../utils/colorConstant';
 import { EyeIcon } from '../assets/svg/eyeOpen';
 import { EyeOffIcon } from '../assets/svg/eyeClose';
 import { KeyboardType } from '../utils/typeConfig';
+import { formatCurrency } from '../utils/helperFunction';
 
 interface InputProps {
   placeHolder?: string;
@@ -58,25 +59,9 @@ const InputCompnent: React.FC<InputProps> = ({
     inputRef.current?.focus();
   };
 
-  const formatCurrency = (text: string) => {
-    const cleanValue = text.replace(/,/g, '');
-    if (isNaN(Number(cleanValue))) return text;
-    if (countryCode === 'INR') {
-      const lastThree = cleanValue.slice(-3);
-      const otherNumbers = cleanValue.slice(0, -3);
-      return (
-        otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') +
-        (otherNumbers ? ',' : '') +
-        lastThree
-      );
-    } else {
-      return Number(cleanValue).toLocaleString('en-US');
-    }
-  };
-
   const handleChangeText = (text: string) => {
     if (isCurrencyUsed) {
-      const formatted = formatCurrency(text);
+      const formatted = formatCurrency(text, countryCode);
       onChangeText(formatted);
     } else {
       onChangeText(text);
