@@ -1,32 +1,56 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import React from 'react';
 import SvgIcon from './svgComponent';
 import { COLORS } from '../utils/colorConstant';
 import { moderateScale, scale, verticalScale } from '../helpers/dimentions';
 import { formatCurrency, setCurrencySigin } from '../utils/helperFunction';
+import { STRING_CONFIG } from '../utils/stringConfig';
 
 interface cardDataProps {
   totalBalance: string;
   currencyType: string;
   Income: string;
   expense: string;
+  mainCardStyle: any;
+  salary: string;
 }
 
 const CardUi: React.FC<cardDataProps> = ({
-  totalBalance = '2000',
+  totalBalance = '0',
   currencyType = 'INR',
-  Income = '2000',
-  expense = '2000',
+  Income = '0',
+  expense = '00',
+  salary = '0',
+  mainCardStyle,
 }) => {
   return (
-    <TouchableOpacity style={styles.mainCardView}>
-      <View style={styles.subView}>
-        <View style={styles.headerView}>
-          <Text style={styles.headerText}>Total Balance</Text>
-          <Text style={styles.totalBalance}>
-            {setCurrencySigin(currencyType)}{' '}
-            {formatCurrency(totalBalance, currencyType)}
-          </Text>
+    <TouchableWithoutFeedback>
+      <View style={[styles.mainCardView, mainCardStyle]}>
+        <View style={styles.headerComponent}>
+          <View style={styles.headerView}>
+            <Text style={styles.headerText}>
+              {STRING_CONFIG.HomeString.totalBalance}
+            </Text>
+            <Text style={styles.totalBalance}>
+              {setCurrencySigin(currencyType)}{' '}
+              {formatCurrency(totalBalance, currencyType)}
+            </Text>
+          </View>
+          <View style={styles.headerView}>
+            <Text style={styles.headerText}>
+              {STRING_CONFIG.HomeString.monthlySalary}
+            </Text>
+            <Text style={styles.totalBalance}>
+              {setCurrencySigin(currencyType)}{' '}
+              {formatCurrency(salary, currencyType)}
+            </Text>
+          </View>
         </View>
         <View style={styles.footerView}>
           <View style={styles.leftComponent}>
@@ -35,12 +59,11 @@ const CardUi: React.FC<cardDataProps> = ({
                 name="arrowDown"
                 width={scale(26)}
                 height={verticalScale(26)}
-                style={{
-                  backgroundColor: COLORS.primaryColor,
-                  borderRadius: 50,
-                }}
+                style={styles.arrowStyle}
               />
-              <Text style={styles.footerText}>Income</Text>
+              <Text style={styles.footerText}>
+                {STRING_CONFIG.HomeString.Income}
+              </Text>
             </View>
             <Text style={[styles.secondaryText, { marginLeft: scale(12) }]}>
               {setCurrencySigin(currencyType)} {''}
@@ -53,12 +76,11 @@ const CardUi: React.FC<cardDataProps> = ({
                 name="arrowUp"
                 width={scale(26)}
                 height={verticalScale(26)}
-                style={{
-                  backgroundColor: COLORS.primaryColor,
-                  borderRadius: 50,
-                }}
+                style={styles.arrowStyle}
               />
-              <Text style={styles.footerText}>Expense</Text>
+              <Text style={styles.footerText}>
+                {STRING_CONFIG.HomeString.Expense}
+              </Text>
             </View>
             <Text style={styles.secondaryText}>
               {' '}
@@ -68,7 +90,7 @@ const CardUi: React.FC<cardDataProps> = ({
           </View>
         </View>
       </View>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -88,11 +110,15 @@ const styles = StyleSheet.create({
     shadowRadius: 8.3,
 
     elevation: 13,
-    bottom: verticalScale(132),
-  },
-  subView: {
     paddingVertical: verticalScale(12),
   },
+  headerComponent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: verticalScale(12),
+  },
+
   headerView: {
     marginBottom: verticalScale(6),
     alignItems: 'flex-start',
@@ -142,5 +168,9 @@ const styles = StyleSheet.create({
   rightComponent: {
     flex: 0.5,
     alignItems: 'center',
+  },
+  arrowStyle: {
+    backgroundColor: COLORS.greenColor.colorOne,
+    borderRadius: 50,
   },
 });

@@ -5,8 +5,12 @@ export const COLORS = {
   shadesOfGrey: {
     greyPrimary: '#444444',
     greyOne: '#808082',
+    tabColor: '#AAAAAA',
   },
   lightGreen: '#EEF8F7',
   red: '#c1121f',
   cardGreenColor: '#2F7E79',
+  greenColor: {
+    colorOne: '#4D918D',
+  },
 };

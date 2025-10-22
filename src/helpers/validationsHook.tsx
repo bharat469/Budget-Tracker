@@ -125,3 +125,25 @@ export const REGISTER_SCHEMA = (loginType: any) =>
       .length(3, 'Currency code must be exactly 3 characters (ISO format)')
       .required('Currency code is required'),
   });
+
+
+ export const ADD_EXPENSE_SCHEMA = Yup.object().shape({
+   expenseName: Yup.string().required('Expense cannot be empty '),
+
+   amount: Yup.string()
+     .required('Amount is required')
+     .test('is-valid-number', 'Amount must be a number', value => {
+       if (!value) return false;
+       const clean = value.replace(/,/g, '');
+       return !isNaN(Number(clean));
+     })
+     .test('is-positive', 'Amount must be positive', value => {
+       if (!value) return false;
+       const clean = value.replace(/,/g, '');
+       return Number(clean) > 0;
+     }),
+
+   date: Yup.date().required('Date is required'),
+
+   logo: Yup.string().url('Logo must be a valid URL').optional(),
+ });

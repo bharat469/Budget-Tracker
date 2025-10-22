@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { IconName } from './imageUrl';
 
 export type KeyboardType =
   | 'default'
@@ -50,4 +51,34 @@ export type CurrencyPickerType = {
   placeholder?: string;
   style?: ReactNode;
   errors?: string;
+};
+
+export type AddExpenseType = {
+  expenseName: string;
+  amount: string;
+  date: Date;
+  expenseIcon?: IconName;
+  id?: string;
+};
+export type ExpenseType = {
+  expenseName: string;
+  amount: string;
+  date: string;
+  expenseIcon?: IconName;
+  id?: string;
+  expenseCategories: string;
+};
+
+export type SaveExpensePayload = {
+  payload: ExpenseType[];
+  userDocId: string;
+  expense: number;
+  total: number;
+  income: number;
+};
+
+export type UpdateExpenseType = {
+  docId: string;
+  expense: number;
+  total: number;
 };

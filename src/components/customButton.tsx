@@ -8,26 +8,29 @@ interface buttonType {
   btnTitleName: string;
   onPress?: () => void;
   customStyle?: any;
+  TextStyle?: any;
 }
 
 const CustomButton: React.FC<buttonType> = ({
   btnTitleName = 'Default',
   onPress,
   customStyle,
+  TextStyle,
 }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
       style={[styles.btnContainer, customStyle]}
+      activeOpacity={0.8}
     >
       <LinearGradient
-        colors={['#0F2027', '#203A43', '#2C5364']}
+        colors={['#69AEA9', '#3F8782']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.buttonGradient}
       >
         <View style={styles.buttonStyle}>
-          <Text style={styles.btnTextStyle}>{btnTitleName}</Text>
+          <Text style={[styles.btnTextStyle, TextStyle]}>{btnTitleName}</Text>
         </View>
       </LinearGradient>
     </TouchableOpacity>
@@ -45,7 +48,7 @@ const styles = StyleSheet.create({
   },
   buttonGradient: {
     alignItems: 'center',
-    borderRadius: moderateScale(12),
+    borderRadius: moderateScale(22),
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

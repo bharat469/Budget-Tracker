@@ -90,4 +90,29 @@ export const STRING_CONFIG = {
     { label: 'Unemployed', value: 'unemployed' },
     { label: 'Student', value: 'student' },
   ],
+  addExpense: {
+    datePicker: 'DD-MM-YYYY',
+    footerText: 'Your Entries',
+    incomeText: '+ Income',
+    expenseText: '- Expense',
+  },
+  HomeString: {
+    transactionHeader: 'Transactions History',
+    seeAll: 'See All',
+    noTranactionString: 'You don’t have any transactions yet.',
+    subHeadingText:
+      'Log your transactions and get detailed insights into your spending habits',
+    totalBalance: 'Balance',
+    monthlySalary: 'Salary',
+    Income: 'Income',
+    Expense: 'Expense',
+  },
+  transactionScreen: {
+    Transaction: 'All Transactions',
+    headerText: 'Total Balance',
+    setFilter: 'Set Filter',
+  },
+  profileScreen: {
+    headerTitle: 'Profile Screen',
+  },
 };

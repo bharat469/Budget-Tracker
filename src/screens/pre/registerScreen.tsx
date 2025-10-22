@@ -10,7 +10,7 @@ import { useValidation } from '../../helpers/yupAdapter';
 import { REGISTER_SCHEMA } from '../../helpers/validationsHook';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { NavigationConstant } from '../../utils/navConstant';
+
 import { RootState } from '../../helpers/redux/store';
 import { startUserData } from '../../helpers/redux/slice/userSlice';
 import EmploymentStatusDropdown from '../../helpers/picker';
