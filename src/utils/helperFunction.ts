@@ -48,3 +48,11 @@ export const setCurrencySigin = (currencyType: string) => {
   });
   return fetchSymbol[0].symbol;
 };
+
+export const expenseTypeSigin = (type: string) => {
+  if (type === 'income') {
+    return '+';
+  } else {
+    return '-';
+  }
+};

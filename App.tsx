@@ -4,11 +4,15 @@ import Navigations from './src/navigations';
 import { Provider } from 'react-redux';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import store from './src/helpers/redux/store';
+import { COLORS } from './src/utils/colorConstant';
 
 function App() {
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1 }} edges={['top', 'left', 'right']}>
+      <SafeAreaView
+        style={{ flex: 1, backgroundColor: COLORS.white }}
+        edges={['top', 'left', 'right']}
+      >
         <Provider store={store}>
           <NavigationContainer>
             <Navigations />

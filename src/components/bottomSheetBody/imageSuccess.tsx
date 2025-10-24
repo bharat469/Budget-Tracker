@@ -7,7 +7,7 @@ import CustomButton from '../customButton';
 import { COLORS } from '../../utils/colorConstant';
 
 const ImageSuccess = () => {
-  console.log('HERE through ios');
+
   return (
     <View style={styles.bottomSheetView}>
       <View style={styles.content}>

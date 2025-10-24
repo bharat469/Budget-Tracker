@@ -9,7 +9,7 @@ interface UserState {
   error: string | null;
   imageUrl: string;
   imageUploadLoading: boolean;
-  imageError: null;
+  imageError: string | null;
 }
 
 const inititalState: UserState = {

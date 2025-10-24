@@ -16,7 +16,7 @@ import { COLORS } from '../utils/colorConstant';
 import { EyeIcon } from '../assets/svg/eyeOpen';
 import { EyeOffIcon } from '../assets/svg/eyeClose';
 import { KeyboardType } from '../utils/typeConfig';
-import { formatCurrency } from '../utils/helperFunction';
+import { formatCurrency, setCurrencySigin } from '../utils/helperFunction';
 
 interface InputProps {
   placeHolder?: string;
@@ -72,6 +72,11 @@ const InputCompnent: React.FC<InputProps> = ({
     <View style={inputView}>
       <View style={[styles.containerDefaultStyle, containerStyle]}>
         {isPhoneNumber && <Text style={styles.inititalText}>+91</Text>}
+        {isCurrencyUsed && (
+          <Text style={styles.inititalTextCurrency}>
+            {setCurrencySigin(countryCode)}
+          </Text>
+        )}
         <TextInput
           ref={inputRef}
           placeholder={placeHolder}
@@ -107,7 +112,7 @@ export default InputCompnent;
 const styles = StyleSheet.create({
   containerDefaultStyle: {
     borderWidth: 1,
-    borderRadius: moderateScale(12),
+    borderRadius: moderateScale(8),
     marginHorizontal: moderateScale(22),
     borderColor: COLORS.primaryColor,
   },
@@ -129,6 +134,12 @@ const styles = StyleSheet.create({
   inititalText: {
     fontSize: moderateScale(18),
     marginHorizontal: scale(4),
+    fontWeight: '700',
+    color: COLORS.black,
+  },
+  inititalTextCurrency: {
+    fontSize: moderateScale(18),
+    marginHorizontal: scale(14),
     fontWeight: '700',
     color: COLORS.black,
   },

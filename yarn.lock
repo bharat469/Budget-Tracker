@@ -2222,6 +2222,14 @@
     invariant "^2.2.4"
     nullthrows "^1.1.1"
 
+"@react-navigation/bottom-tabs@^7.4.7":
+  version "7.4.7"
+  resolved "https://registry.yarnpkg.com/@react-navigation/bottom-tabs/-/bottom-tabs-7.4.7.tgz#c6fb80bfe25f47db27491918a764e01877f7efeb"
+  integrity sha512-SQ4KuYV9yr3SV/thefpLWhAD0CU2CrBMG1l0w/QKl3GYuGWdN5OQmdQdmaPZGtsjjVOb+N9Qo7Tf6210P4TlpA==
+  dependencies:
+    "@react-navigation/elements" "^2.6.4"
+    color "^4.2.3"
+
 "@react-navigation/core@^7.12.4":
   version "7.12.4"
   resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-7.12.4.tgz#73cc4c0989455c93bf21d7aeecc89d3a7006ccde"
@@ -2239,6 +2247,15 @@
   version "2.6.3"
   resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-2.6.3.tgz#77cc4d989c0831ec59dc87b982f18bc644ac8e67"
   integrity sha512-hcPXssZg5bFD5oKX7FP0D9ZXinRgPUHkUJbTegpenSEUJcPooH1qzWJkEP22GrtO+OPDLYrCVZxEX8FcMrn4pA==
+  dependencies:
+    color "^4.2.3"
+    use-latest-callback "^0.2.4"
+    use-sync-external-store "^1.5.0"
+
+"@react-navigation/elements@^2.6.4":
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-2.6.4.tgz#f1dc8548b1289588fabcd2f0342c1391c689a49f"
+  integrity sha512-O3X9vWXOEhAO56zkQS7KaDzL8BvjlwZ0LGSteKpt1/k6w6HONG+2Wkblrb057iKmehTkEkQMzMLkXiuLmN5x9Q==
   dependencies:
     color "^4.2.3"
     use-latest-callback "^0.2.4"
@@ -6596,6 +6613,11 @@ react-native-animatable@1.4.0:
   integrity sha512-DZwaDVWm2NBvBxf7I0wXKXLKb/TxDnkV53sWhCvei1pRyTX3MVFpkvdYBknNBqPrxYuAIlPxEp7gJOidIauUkw==
   dependencies:
     prop-types "^15.8.1"
+
+react-native-date-picker@^5.0.13:
+  version "5.0.13"
+  resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-5.0.13.tgz#fe05f58652aaeee9e67f73cf7436c32a623ff3a4"
+  integrity sha512-qCLUODZVsJetO5zuoXjw1D39K527XWqBG8sOfhWdHyPzf13h8RXR1/RSKd1N0fdRDi5GdyizYmB0lPAK12/hbw==
 
 react-native-dotenv@^3.4.11:
   version "3.4.11"

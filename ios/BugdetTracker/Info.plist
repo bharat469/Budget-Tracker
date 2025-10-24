@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>BugdetTracker</string>
+	<string>Budget Buddy</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -20,11 +20,8 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-
-	<!-- ✅ Combined Google + Facebook URL Schemes -->
 	<key>CFBundleURLTypes</key>
 	<array>
-		<!-- Google Sign-In -->
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -33,7 +30,6 @@
 				<string>com.googleusercontent.apps.526058214643-hjnv689mod7odb0jtk8aqcc53q0t92q6</string>
 			</array>
 		</dict>
-		<!-- Facebook Sign-In -->
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
@@ -41,11 +37,8 @@
 			</array>
 		</dict>
 	</array>
-
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
-
-	<!-- ✅ Add all required Facebook schemes -->
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -53,10 +46,8 @@
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
 	</array>
-
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -64,7 +55,6 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
-
 	<key>NSCameraUsageDescription</key>
 	<string>This app requires access to your camera to take profile pictures.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -73,34 +63,26 @@
 	<string>This app requires access to your microphone while recording videos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app requires access to your photo library to upload and select images.</string>
-
 	<key>RCTNewArchEnabled</key>
 	<true/>
-
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>processing</string>
 	</array>
-
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
-
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>arm64</string>
 	</array>
-
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-
-	<!-- ✅ Facebook config -->
 	<key>FacebookAppID</key>
 	<string>1772162423413386</string>
 	<key>FacebookClientToken</key>

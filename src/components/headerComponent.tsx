@@ -6,6 +6,8 @@ import { COLORS } from '../utils/colorConstant';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { resetAll } from '../helpers/redux/slice/authSlice';
+import LeftChevronIcon from '../assets/svg/svgWrapper/chevronLeft';
+import FilterIcon from '../assets/svg/svgWrapper/filterIcon';
 
 interface HeaderComponentProps {
   headerTiltle: string;
@@ -20,7 +22,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({
   headerTiltle = 'default',
   isShowRightIcon = false,
   headerType = 'default',
-  rightIconName = 'downloadIcon',
+  rightIconName,
   onBackPress,
   onRightPress,
 }) => {
@@ -39,27 +41,37 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({
     <View style={styles.headerView}>
       {/* Left Chevron (Back Button) */}
       <TouchableOpacity onPress={handleBackPress} activeOpacity={0.7}>
-        <SvgIcon
-          name="leftChevronIcon"
+        <LeftChevronIcon
           width={scale(28)}
           height={verticalScale(28)}
-          fill={COLORS.primaryColor}
+          fill={headerType === 'home' ? COLORS.white : COLORS.primaryColor}
         />
       </TouchableOpacity>
 
       {/* Title (Always Centered) */}
-      <Text style={styles.headerText}>{headerTiltle}</Text>
+      <Text
+        style={[
+          styles.headerText,
+          headerType === 'home' && { color: COLORS.white },
+        ]}
+      >
+        {headerTiltle}
+      </Text>
 
       {/* Right Icon Placeholder (Keeps Layout Balanced) */}
       <View style={styles.rightIconWrapper}>
         {isShowRightIcon && (
           <TouchableOpacity onPress={onRightPress} activeOpacity={0.7}>
-            <SvgIcon
-              name={rightIconName}
-              width={scale(32)}
-              height={verticalScale(32)}
-              fill={COLORS.primaryColor}
-            />
+            {rightIconName ? (
+              <SvgIcon
+                name={rightIconName}
+                width={scale(32)}
+                height={verticalScale(32)}
+                fill={COLORS.primaryColor}
+              />
+            ) : (
+              <FilterIcon color={COLORS.white} />
+            )}
           </TouchableOpacity>
         )}
       </View>

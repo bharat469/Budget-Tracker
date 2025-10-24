@@ -1,3 +1,6 @@
 {
-  "conventionalCommits.scopes": ["validations "]
+  "conventionalCommits.scopes": [
+    "validations ",
+    "main logic done with use cases"
+  ]
 }

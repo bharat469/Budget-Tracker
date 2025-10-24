@@ -47,6 +47,7 @@ function* PhoneVerifyOtpSaga(action: any): Generator<any, void, any> {
     yield put(resetAll());
     yield put(saveUserToken(response.uid));
   } catch (error: any) {
+    console.log('error', error);
     yield put(verifyOtpFailure(error.message || 'Registeration failed'));
   }
 }

@@ -123,15 +123,19 @@ const VerifyOtpScreen = (props: any) => {
           <View style={styles.timerWrapper}>
             {otpTimer > 0 ? (
               <Text style={styles.timerText}>
-                Resend code in <Text style={styles.counter}>{otpTimer}s</Text>
+                {STRING_CONFIG.otpScreen.resendOtpText}{' '}
+                <Text style={styles.counter}>{otpTimer}</Text>s
               </Text>
             ) : (
               <TouchableOpacity onPress={handleResend}>
                 <Text
                   style={[styles.timerText, { fontSize: moderateScale(16) }]}
                 >
-                  if you didn't receive a code?
-                  <Text style={styles.resendText}> Resend OTP</Text>
+                  {STRING_CONFIG.otpScreen.noOtpText}
+                  <Text style={styles.resendText}>
+                    {' '}
+                    {STRING_CONFIG.otpScreen.resendOtp}
+                  </Text>
                 </Text>
               </TouchableOpacity>
             )}
@@ -207,7 +211,6 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     fontSize: moderateScale(18),
     fontWeight: '500',
-    textTransform: 'capitalize',
   },
   counter: {
     color: COLORS.red,

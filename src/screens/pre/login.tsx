@@ -57,6 +57,8 @@ const Login = (props: any) => {
     dispatch(resetAll());
   };
 
+  console.log('data is', loginData);
+
   useEffect(() => {
     if (loginData) {
       props.navigation.navigate(NavigationConstant.VERIFY_OTP_SCREEN, {
