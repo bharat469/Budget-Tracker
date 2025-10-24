@@ -84,11 +84,25 @@ export const updateExpense = async (
     const data = docSnap.data();
     const oldExpense = data?.expense ?? 0;
     const oldIncome = data?.income ?? 0;
-
-    const totalOld = data?.total ?? 0;
     const newExpense = oldExpense + expense;
     const newIncome = oldIncome + income;
+    const monthlySalary = parseFloat(
+      data?.payload?.monthlyIncome.replace(/,/g, ''),
+    );
+    const totalOld = data?.total === 0 ? monthlySalary : data?.total;
     const newTotal = totalOld - expense + income;
+
+ console.log(
+   expense,
+   'skdjklsd',
+   oldExpense,
+   'sjdhksjdh',
+   total,
+   '12121212',
+   newTotal,
+   'sjkdkjshd',
+   docSnap.exists(),
+ );
 
     if (docSnap.exists()) {
       await updateDoc(docRef, {

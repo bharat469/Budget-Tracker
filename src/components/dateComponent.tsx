@@ -61,6 +61,7 @@ const DateComponent: React.FC<datePicker> = ({
           setIsOpen(false);
           onChange(selectedDate);
         }}
+        maximumDate={value}
       />
       {errorMessage.length !== 0 && (
         <Text style={styles.errorMessage}>{errorMessage}</Text>

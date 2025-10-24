@@ -115,4 +115,9 @@ export const STRING_CONFIG = {
   profileScreen: {
     headerTitle: 'Profile Screen',
   },
+  otpScreen: {
+    resendOtpText: 'Resend code in',
+    noOtpText: `If You Didn't Receive a Code?`,
+    resendOtp: 'Resend OTP',
+  },
 };

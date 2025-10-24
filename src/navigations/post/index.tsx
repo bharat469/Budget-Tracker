@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
 
     elevation: 6,
-    marginHorizontal: scale(22),
+    marginHorizontal: scale(12),
     marginBottom: verticalScale(22),
     borderRadius: moderateScale(12),
   },
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
   floatingButton: {
     position: 'absolute',
     bottom: verticalScale(34),
-    left: SCREEN.WIDTH / 2.8,
+    left: SCREEN.WIDTH / 2.6,
     width: scale(55),
     height: verticalScale(55),
     borderRadius: moderateScale(30),

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BugdetTracker</string>
+    <string name="app_name">Budget Buddy</string>
     <string name="facebook_app_id">1772162423413386</string>
 <string name="fb_login_protocol_scheme">fb1234</string>
 <string name="facebook_client_token">585dc778f83a95e6c52d7e2abf7ecbb7</string>

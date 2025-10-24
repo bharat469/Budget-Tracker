@@ -75,6 +75,7 @@ const AddExpense = (props: any) => {
       };
       setData(prev => [...prev, finalValue]);
       resetForm();
+      setSelectedType('income');
       Keyboard.dismiss();
     },
   });
@@ -100,10 +101,6 @@ const AddExpense = (props: any) => {
     });
 
     const total = income - expense;
-
-    const monthlyIncome = parseFloat(userInfo.total);
-
-    const remainingBalance = monthlyIncome + total;
 
     const payloadData: SaveExpensePayload = {
       payload: data,
@@ -161,13 +158,19 @@ const AddExpense = (props: any) => {
     return <ActivityIndicator />;
   }
 
+  const _handleBackNavigation = () => {
+    formik.setErrors({});
+    formik.setTouched({});
+    props.navigation.goBack();
+  };
+
   return (
     <HomeWrappers>
       <View style={styles.headerComponent}>
         <HeaderComponent
           headerTiltle="Add Expense"
           headerType="home"
-          onBackPress={() => props.navigation.goBack()}
+          onBackPress={_handleBackNavigation}
         />
       </View>
       <View style={styles.otherHalfComponent}>
@@ -273,7 +276,7 @@ const AddExpense = (props: any) => {
               <>
                 <View style={styles.flatListView}>
                   <FlatList
-                    data={data}
+                    data={data.reverse()}
                     renderItem={_handleAddExpense}
                     keyExtractor={(item, index) => item.id ?? index.toString()}
                     showsVerticalScrollIndicator={false}

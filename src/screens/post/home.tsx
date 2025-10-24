@@ -99,14 +99,21 @@ const Home = (props: any) => {
               <Text style={styles.nameText}>Hi {userDataDestructure.name}</Text>
             </View>
             <View>
-              <Image
-                source={
-                  userDataDestructure?.profilePic
-                    ? { uri: userDataDestructure?.profilePic }
-                    : IMAGE_URL.avatarImage
+              <TouchableOpacity
+                onPress={() =>
+                  props.navigation.navigate(NavigationConstant.PROFILE_SCREEN)
                 }
-                style={{ height: 50, width: 50, borderRadius: 50 }}
-              />
+                activeOpacity={0.8}
+              >
+                <Image
+                  source={
+                    userDataDestructure?.profilePic
+                      ? { uri: userDataDestructure?.profilePic }
+                      : IMAGE_URL.avatarImage
+                  }
+                  style={{ height: 50, width: 50, borderRadius: 50 }}
+                />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -115,7 +122,7 @@ const Home = (props: any) => {
         <View>
           <CardUi
             totalBalance={
-              userInfo.income !== 0
+              userInfo.total !== 0
                 ? userInfo?.total?.toString()
                 : userDataDestructure?.monthlyIncome
             }

@@ -95,6 +95,7 @@ const AuthSlice = createSlice({
       state.FacebookSiginData = null;
       state.FacebookSiginError = null;
       state.isLoading = false;
+      state.loginData = null;
     },
   },
 });
