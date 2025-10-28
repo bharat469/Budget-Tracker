@@ -122,7 +122,7 @@ const Home = (props: any) => {
         <View>
           <CardUi
             totalBalance={
-              userInfo.total !== 0
+              userInfo.total && userInfo.total !== 0
                 ? userInfo?.total?.toString()
                 : userDataDestructure?.monthlyIncome
             }
