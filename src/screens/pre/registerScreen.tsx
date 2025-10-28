@@ -61,7 +61,6 @@ const RegisterScreen = (props: any) => {
 
     let clean = number.trim();
 
-   
     clean = clean.replace(/"/g, '');
 
     if (clean.startsWith('+')) {
@@ -81,7 +80,7 @@ const RegisterScreen = (props: any) => {
     if (clean.length === 12 && clean.startsWith('91')) {
       return `+${clean}`;
     }
- 
+
     return clean;
   };
 
@@ -163,10 +162,11 @@ const RegisterScreen = (props: any) => {
         errorMessage={
           formik.touched.monthlyIncome ? formik.errors.monthlyIncome : ''
         }
-        containerStyle={{ marginTop: verticalScale(12) }}
+        containerStyle={styles.monthlyIncome}
         keyBoardType="number-pad"
         isCurrencyUsed={true}
         countryCode={formik.values.currency}
+        inputStyle={{ flex: 1 }}
       />
       <EmploymentStatusDropdown
         value={formik.values.employmentStatus}
@@ -198,5 +198,10 @@ const styles = StyleSheet.create({
   textView: {
     alignItems: 'center',
     marginTop: moderateScale(12),
+  },
+  monthlyIncome: {
+    marginTop: verticalScale(12),
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

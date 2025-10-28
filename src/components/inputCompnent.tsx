@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   },
   inititalTextCurrency: {
     fontSize: moderateScale(18),
-    marginHorizontal: scale(14),
+    marginLeft: scale(8),
     fontWeight: '700',
     color: COLORS.black,
   },
